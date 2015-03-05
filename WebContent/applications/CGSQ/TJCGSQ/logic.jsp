@@ -1,8 +1,11 @@
-
+<%@page import="java.util.Enumeration"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.Connection"%><%@page import="com.imooc.db.Md5" %>
+<%@page import="java.sql.Connection"%>
+<%@page import="com.imooc.db.Md5" %>
 <%@page import="org.json.JSONObject"%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.imooc.db.DBUtil" %>
@@ -176,4 +179,23 @@
 		response.getWriter().print(json);		
 		
 	}
+	
+	if(type.equals("save")){
+		Map<String,String> map=new HashMap<String,String>();
+		StringBuffer sb=new StringBuffer();
+		sb.append("INSERT INTO T_CGZXT_CGSQB(");
+		StringBuffer cm=new StringBuffer();
+		StringBuffer vl=new StringBuffer();
+		Enumeration<String> names=request.getParameterNames();
+			while(names.hasMoreElements()){
+				String name=names.nextElement();
+				cm.append(name+",");
+				String value=request.getParameter(name);
+				vl.append("'"+value+"',");
+			}
+			System.out.println(cm.toString());
+			System.out.println(vl.toString());
+
+		}
+	
 %>
