@@ -1,8 +1,11 @@
-
+<%@page import="java.util.Enumeration"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.Connection"%><%@page import="com.imooc.db.Md5" %>
+<%@page import="java.sql.Connection"%>
+<%@page import="com.imooc.db.Md5" %>
 <%@page import="org.json.JSONObject"%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.imooc.db.DBUtil" %>
@@ -16,6 +19,7 @@
 	*
 	*
 	**/
+	request.setCharacterEncoding("UTF-8");
 	String type="";
 	Date d=new Date();
 	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -175,5 +179,46 @@
 		}
 		response.getWriter().print(json);		
 		
+	}
+	
+	if(type.equals("save")){
+		Map<String,String> map=new HashMap<String,String>();
+		StringBuffer sb=new StringBuffer();
+		sb.append("INSERT INTO T_CGZXT_CGSQB( WID,");
+		StringBuffer cm=new StringBuffer();
+		StringBuffer vl=new StringBuffer();
+		Enumeration<String> names=request.getParameterNames();
+			while(names.hasMoreElements()){
+				String name=names.nextElement();
+				if(!name.equals("type")){
+					cm.append(name+",");
+				}
+				String value=request.getParameter(name);
+				if(!value.equals("save")){
+					vl.append("'"+value+"',");
+				}
+			}
+		sb.append(cm.toString().substring(0,cm.length()-1)).append(") VALUES(").append("SYS_GUID(),"+vl.toString().substring(0,vl.toString().length()-1)).append(")");
+		JSONObject obj=new JSONObject();
+		//http://www.cnblogs.com/buzz/archive/2009/04/30/1447103.html
+		try{
+			Connection conn=DBUtil.getConnection();
+			PreparedStatement pstmt=conn.prepareStatement(sb.toString());
+			int rows=pstmt.executeUpdate();
+			if(rows>0){
+				obj.put("success", true);
+				obj.put("errors","{}");
+				System.out.println("update:"+sb.toString());
+			}else{
+				obj.put("success", false);
+				obj.put("errors","{info:'错误了'}");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errors","{info:'错误了'}");
+		}finally{
+			response.getWriter().print(obj);
+		}
 	}
 %>

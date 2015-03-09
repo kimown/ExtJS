@@ -13,7 +13,7 @@ function formInit(){
         //http://www.cnblogs.com/zqmingok/articles/1698336.html
    simple = new Ext.FormPanel({
         labelWidth: 120, // label settings here cascade unless overridden
-        url:'save-form.php',
+        //url:'save-form.php',
         frame:true,
         iconCls:'',
        // autoScroll :true,
@@ -59,7 +59,11 @@ function formInit(){
             }
         },{
             text: '暂存',
-            iconCls:'Disk'
+            iconCls:'Disk',
+            handler:function(){
+            	save();
+            }
+            
         },{
             text: '提交',
             iconCls:'Accept'
@@ -70,6 +74,41 @@ function formInit(){
     formeventInit();
 }
 
+function save(){
+	if(simple.form.isValid()){
+		//http://my.oschina.net/journeyAya/blog/7686
+		simple.form.submit({
+			method:'post',
+			waitMsg:'保存数据中...',
+			url:'logic.jsp',
+			success:function(a,b,c,d,e){
+				aaa
+			},
+			failure:function(a,b,c,d){
+				bbb
+			}
+		});
+	}else{
+//http://stackoverflow.com/questions/13311375/extjs-create-custon-icon-for-ext-messagebox
+		var fields=['CGFS','SGRDH','YQWCSJ','XMFZR','FZRDH','SYXQ','CKDJ','YQSBMC','JFDM','JFMC'];
+		var invalidFields=[];
+		for(var i=0;i<fields.length;i++){
+			if(Ext.getCmp(fields[i]).isValid()==false){
+				var msg='<div style="width:260">'+"["+Ext.getCmp(fields[i]).fieldLabel+"]是必填项，请输入"+'</div>';
+				Ext.MessageBox.show({
+					title:'提示',
+					msg:msg,
+					buttons:Ext.MessageBox.OK,
+					icon:Ext.MessageBox.ERROR,
+					fn:function(){
+						Ext.getCmp(fields[i]).focus();
+					}
+				})
+				return;
+			}
+		}
+	}
+}
 function formeventInit(){
 	//可以参考这个  ,使用keydown事件达成更好的效果
 	//http://www.cnblogs.com/hongdada/archive/2013/03/08/2949681.html
@@ -165,6 +204,7 @@ function createCustomField(id){
 		var r = record.copy();
 	    r.id = r.get('ZGH');
 	    Ext.fly("FZRDH").dom.value=r.get("SJ");
+	    Ext.fly("FZRBH").dom.value=r.get("ZGH");
 	}, this);
 	return zghField;
 }
@@ -277,6 +317,7 @@ function  items1Init(){
     	width:165,
     	allowNegative:false,
     	allowDecimals:true,
+		allowBlank :false,
     	fieldLabel:'参考单价（元）',
     	sideText : '<font color=red>*</font>' 
     }
@@ -347,6 +388,13 @@ function items2Init(){
 		sideText :'<font color=red>*</font>'
 	}
 	
+	ar[k++]=new Ext.form.Hidden({
+		id:'FZRBH'
+	})
+	ar[k++]=new Ext.form.Hidden({
+		id:'type',
+		value:'save'
+	})
 	ar[k++]=new Ext.form.ComboBox({
         store: new Ext.data.SimpleStore({
         	fields:['name','value'],
@@ -357,6 +405,7 @@ function items2Init(){
         }),
         id:'SFJK',
         name:'SFJK',
+        allowBlank :false,
         valueField:'name',
         displayField:'value',
         typeAhead: true,
@@ -387,6 +436,7 @@ function items2Init(){
     	name:'JFDM',
     	fieldLabel:'经费代码',
     	width:165,
+		allowBlank :false,
     	sideText :'<font color=red>*</font>'
     }
     
@@ -400,6 +450,7 @@ function items2Init(){
         }),
         id:'SFZG',
         name:'SFZG',
+        allowBlank :false,
         valueField:'name',
         displayField:'value',
         typeAhead: true,
@@ -423,6 +474,7 @@ function items3Init(){
 		name:'SGRDH',
 		width:165,
 		fieldLabel:'申购人电话',
+		allowBlank :false,
 		sideText : '<font color=red>*</font>'		
 	};
 	
@@ -442,6 +494,7 @@ function items3Init(){
 		name:'FZRDH',
 		width:165,
 		fieldLabel:'负责人电话',
+		allowBlank :false,		
       	sideText : '<font color=red>*</font>'		
 	};
 	
@@ -455,6 +508,7 @@ function items3Init(){
         }),
         id:'SFMS',
         name:'SFMS',
+        allowBlank :false,
         valueField:'name',
         displayField:'value',
         typeAhead: true,
@@ -472,6 +526,7 @@ function items3Init(){
 		id:'YQSBMC',
 		name:'YQSBMC',
 		width:165,
+		allowBlank :false,
 		fieldLabel:'仪器设备名称',
     	sideText :'<font color=red>*</font>'		
 	};
@@ -482,6 +537,7 @@ function items3Init(){
 		name:'JFMC',
 		width:165,
 		fieldLabel:'经费名称',
+		allowBlank :false,
     	sideText :'<font color=red>*</font>'		
 	};
 	return ar;
