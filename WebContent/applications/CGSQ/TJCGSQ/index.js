@@ -81,21 +81,32 @@ function save(){
 			method:'post',
 			waitMsg:'保存数据中...',
 			url:'logic.jsp',
-			success:function(){
-				
+			success:function(a,b,c,d,e){
+				aaa
 			},
-			failure:function(){
-				
+			failure:function(a,b,c,d){
+				bbb
 			}
 		});
 	}else{
 //http://stackoverflow.com/questions/13311375/extjs-create-custon-icon-for-ext-messagebox
-		Ext.MessageBox.show({
-			title:'提示',
-			msg:'请输入必填项！',
-			buttons:Ext.MessageBox.OK,
-			icon:Ext.MessageBox.ERROR
-		})	
+		var fields=['CGFS','SGRDH','YQWCSJ','XMFZR','FZRDH','SYXQ','CKDJ','YQSBMC','JFDM','JFMC'];
+		var invalidFields=[];
+		for(var i=0;i<fields.length;i++){
+			if(Ext.getCmp(fields[i]).isValid()==false){
+				var msg='<div style="width:260">'+"["+Ext.getCmp(fields[i]).fieldLabel+"]是必填项，请输入"+'</div>';
+				Ext.MessageBox.show({
+					title:'提示',
+					msg:msg,
+					buttons:Ext.MessageBox.OK,
+					icon:Ext.MessageBox.ERROR,
+					fn:function(){
+						Ext.getCmp(fields[i]).focus();
+					}
+				})
+				return;
+			}
+		}
 	}
 }
 function formeventInit(){
@@ -394,6 +405,7 @@ function items2Init(){
         }),
         id:'SFJK',
         name:'SFJK',
+        allowBlank :false,
         valueField:'name',
         displayField:'value',
         typeAhead: true,
@@ -438,6 +450,7 @@ function items2Init(){
         }),
         id:'SFZG',
         name:'SFZG',
+        allowBlank :false,
         valueField:'name',
         displayField:'value',
         typeAhead: true,
@@ -495,6 +508,7 @@ function items3Init(){
         }),
         id:'SFMS',
         name:'SFMS',
+        allowBlank :false,
         valueField:'name',
         displayField:'value',
         typeAhead: true,
