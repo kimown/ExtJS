@@ -99,7 +99,7 @@ function save(){
 		});
 	}else{
 //http://stackoverflow.com/questions/13311375/extjs-create-custon-icon-for-ext-messagebox
-		var fields=['CGFS','SGRDH','YQWCSJ','XMFZR','FZRDH','SYXQ','CKDJ','YQSBMC','JFDM','JFMC'];
+		var fields=['I_CGFS','SGRDH','YQWCSJ','XMFZR','FZRDH','I_SYXQ','CKDJ','YQSBMC','JFDM','JFMC'];
 		for(var i=0;i<fields.length;i++){
 			if(Ext.getCmp(fields[i]).isValid()==false){
 				var msg='<div style="width:260">'+"["+Ext.getCmp(fields[i]).fieldLabel+"]是必填项，请输入"+'</div>';
@@ -138,9 +138,11 @@ function formeventInit(){
 	})
 }
 function formdataInit(){
-	var ar=['SGSJ','ZGZJ','SGXQ','SGR','SGBM'];
+	var ar=['SGSJ','ZGZJ','I_SGXQ','SGR','I_SGBM'];
 	for(var i=0;i<ar.length;i++){
-		simple.findById(ar[i]).setDisabled(true);
+		//simple.findById(ar[i]).setDisabled(true);
+		//使用样式来进行补课编辑http://www.360doc.com/content/13/0127/19/432969_262718856.shtml
+		simple.findById(ar[i]).addClass("x-item-disabled");
 	}
 	simple.findById("SGSJ").setValue(date);
 	simple.findById("SGSL").setValue("1");
@@ -157,10 +159,10 @@ function formdataInit(){
 			if(json.iresult==true){
 				simple.findById("SGR").setValue(json.records[0].XM);
 				simple.findById("SGRDH").setValue(json.records[0].SJ);
-				simple.findById("SGXQ").setValue(json.records[0].XQDM);
-				simple.findById("SGXQ").setRawValue(json.records[0].XQMC);
-				simple.findById("SGBM").setValue(json.records[0].DWDM);
-				simple.findById("SGBM").setRawValue(json.records[0].DWMC);
+				simple.findById("I_SGXQ").setValue(json.records[0].XQDM);
+				simple.findById("I_SGXQ").setRawValue(json.records[0].XQMC);
+				simple.findById("I_SGBM").setValue(json.records[0].DWDM);
+				simple.findById("I_SGBM").setRawValue(json.records[0].DWMC);
 
 			}
 			}
@@ -243,7 +245,8 @@ function  items1Init(){
 		fieldLabel:'采购方式',
 		labelAlign:'right',
 		store:ds_cgfs,
-		id:'CGFS',
+		hiddenName:'CGFS', //submit()会提交hiddenName作为key，value作为值
+		id:'I_CGFS',
 		name:'CGFS',
 		emptyText:'请选择',
 		mode:'remote',
@@ -270,8 +273,9 @@ function  items1Init(){
 		fieldLabel:'申购部门',
 		labelAlign:'right',
 		store:ds_sgbm,
-		id:'SGBM',
+		id:'I_SGBM',
 		name:'SGBM',
+		hiddenName:'SGBM',
 		emptyText:'请选择',
 		mode:'remote',
 		allowBlank :false,
@@ -306,8 +310,9 @@ function  items1Init(){
 		fieldLabel:'使用校区',
 		labelAlign:'right',
 		store:ds_syxq,
-		id:'SYXQ',
+		id:'I_SYXQ',
 		name:'SYXQ',
+		hiddenName:'SYXQ',
 		emptyText:'请选择',
 		mode:'remote',
 		allowBlank :false,
@@ -361,6 +366,11 @@ function items2Init(){
 		fieldLabel:'申购人'
 	};
 	
+	ar[k++]=new Ext.form.Hidden({
+		id:'SGRBH',
+		value:username
+	});
+	
 	var ds_syxq=new Ext.data.Store({
 		proxy:new Ext.data.HttpProxy({
 			url:'logic.jsp?type=SYXQ'
@@ -376,7 +386,8 @@ function items2Init(){
 		fieldLabel:'申购校区',
 		labelAlign:'right',
 		store:ds_syxq,
-		id:'SGXQ',
+		hiddenName:'SGXQ',
+		id:'I_SGXQ',
 		name:'SGXQ',
 		emptyText:'请选择',
 		mode:'remote',
@@ -411,8 +422,9 @@ function items2Init(){
         		['1','是']
         	]
         }),
-        id:'SFJK',
+       // id:'SFJK',
         name:'SFJK',
+        hiddenName:'SFJK',
         allowBlank :false,
         valueField:'name',
         displayField:'value',
@@ -456,7 +468,8 @@ function items2Init(){
         		['1','是']
         	]
         }),
-        id:'SFZG',
+        id:'I_SFZG',
+        hiddenName:'SFZG',
         name:'SFZG',
         allowBlank :false,
         valueField:'name',
@@ -514,10 +527,11 @@ function items3Init(){
         		['1','是']
         	]
         }),
-        id:'SFMS',
+       // id:'SFMS',
         name:'SFMS',
         allowBlank :false,
         valueField:'name',
+        hiddenName:'SFMS',
         displayField:'value',
         typeAhead: true,
         width:165,

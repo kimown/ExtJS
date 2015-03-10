@@ -33,3 +33,21 @@ WID VARCHAR2(40) NOT NULL,
 XQBM VARCHAR2(40),
 XQMC VARCHAR2(40)      
 )
+
+--20150310 11:14
+--申购编号递增序列
+create sequence seq_sgbh
+increment by 1
+start with 1
+minvalue 1 nomaxvalue
+nocycle
+--创建触发器
+CREATE OR REPLACE TRIGGER tr_seq_ssgbh
+  BEFORE INSERT ON T_CGZXT_CGSQB
+FOR EACH ROW
+BEGIN
+  SELECT
+     'A'||to_char(sysdate,'yyyy-mm-dd')  ||'_'||  TRIM(TO_CHAR(seq_sgbh.nextval, '000')) INTO :new.SGBH
+  FROM
+    dual;
+END;
