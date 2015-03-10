@@ -81,17 +81,25 @@ function save(){
 			method:'post',
 			waitMsg:'保存数据中...',
 			url:'logic.jsp',
-			success:function(a,b,c,d,e){
-				aaa
+			success:function(form,action){
+				//form保存方法。
+				//http://witcheryne.iteye.com/blog/335577
+				var iresult=action.result.success;
+				if(iresult){
+					Ext.Msg.alert("提示",'&nbsp;&nbsp;&nbsp;&nbsp;保存成功&nbsp;&nbsp;&nbsp;&nbsp;',function(){
+						if(!!simple.getForm().reset()){
+							formdataInit();
+						}
+					});
+				}
 			},
-			failure:function(a,b,c,d){
-				bbb
+			failure:function(form,action){
+				Ext.Msg.alert("提示",'与数据库交互失败，请稍后再试！');
 			}
 		});
 	}else{
 //http://stackoverflow.com/questions/13311375/extjs-create-custon-icon-for-ext-messagebox
 		var fields=['CGFS','SGRDH','YQWCSJ','XMFZR','FZRDH','SYXQ','CKDJ','YQSBMC','JFDM','JFMC'];
-		var invalidFields=[];
 		for(var i=0;i<fields.length;i++){
 			if(Ext.getCmp(fields[i]).isValid()==false){
 				var msg='<div style="width:260">'+"["+Ext.getCmp(fields[i]).fieldLabel+"]是必填项，请输入"+'</div>';
