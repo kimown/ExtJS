@@ -82,6 +82,7 @@ function save(){
 			waitMsg:'保存数据中...',
 			url:'logic.jsp',
 			success:function(form,action){
+				//属性disabled会无法submit,http://zhidao.baidu.com/question/334747652.html
 				//form保存方法。
 				//http://witcheryne.iteye.com/blog/335577
 				var iresult=action.result.success;
@@ -143,6 +144,9 @@ function formdataInit(){
 		//simple.findById(ar[i]).setDisabled(true);
 		//使用样式来进行补课编辑http://www.360doc.com/content/13/0127/19/432969_262718856.shtml
 		simple.findById(ar[i]).addClass("x-item-disabled");
+		//simple.findById(ar[i]).getEl().dom.readOnly = true; 
+		//Ext.getCmp(ar[i]).getEl().dom.readOnly = true; 
+		
 	}
 	simple.findById("SGSJ").setValue(date);
 	simple.findById("SGSL").setValue("1");
@@ -278,6 +282,7 @@ function  items1Init(){
 		hiddenName:'SGBM',
 		emptyText:'请选择',
 		mode:'remote',
+		readOnly:true,
 		allowBlank :false,
 		triggerAction:'all',
 		valueField:'__DWDM',
@@ -387,6 +392,7 @@ function items2Init(){
 		labelAlign:'right',
 		store:ds_syxq,
 		hiddenName:'SGXQ',
+		readOnly:true,
 		id:'I_SGXQ',
 		name:'SGXQ',
 		emptyText:'请选择',
@@ -505,6 +511,7 @@ function items3Init(){
 		name:'SGSJ',
 		emptyText:'请选择',
 		width :165,
+		readOnly:true,
 		format:'Y-m-d',
 		sideText : false	
 	});
@@ -668,7 +675,34 @@ function override(){
                 ct.first('div').insertHtml('beforeEnd','<div  class="x-form-sideText">'+this.sideText+'</div>')
                 //手册参考：http://www.jb51.net/article/29946.htm
                 }
-            }  
+            } ,
+        onTriggerClick : function(){
+        if(this.disabled){
+            return;
+        }
+        if(this.readOnly==true){
+        	return;
+        }
+        if(this.menu == null){
+            this.menu = new Ext.menu.DateMenu();
+        }
+        Ext.apply(this.menu.picker,  {
+            minDate : this.minValue,
+            maxDate : this.maxValue,
+            disabledDatesRE : this.ddMatch,
+            disabledDatesText : this.disabledDatesText,
+            disabledDays : this.disabledDays,
+            disabledDaysText : this.disabledDaysText,
+            format : this.format,
+            minText : String.format(this.minText, this.formatDate(this.minValue)),
+            maxText : String.format(this.maxText, this.formatDate(this.maxValue))
+        });
+        this.menu.on(Ext.apply({}, this.menuListeners, {
+            scope:this
+        }));
+        this.menu.picker.setValue(this.getValue() || new Date());
+        this.menu.show(this.el, "tl-bl?");
+    }
         });
        Ext.override(Ext.form.TextArea, {  
             sideText : '',  
@@ -702,4 +736,70 @@ function override(){
                 	}
 				}
         });
+        
+       Ext.override(Ext.form.ComboBox, {
+        onTriggerClick : function(){
+        if(this.disabled){
+            return;
+        }
+        if(this.readOnly==true){
+        	return;
+        }
+        if(this.isExpanded()){
+            this.collapse();
+            this.el.focus();
+        }else {
+            this.onFocus({});
+            if(this.triggerAction == 'all') {
+                this.doQuery(this.allQuery, true);
+            } else {
+                this.doQuery(this.getRawValue());
+            }
+            this.el.focus();
+        }
+    }
+       })    
+       
+       
+/*  重写combobox的ontriggerclick
+ * 事件：http://zhidao.baidu.com/question/1173976612926289819.html
+ */
+Ext.form.ComboBox.prototype.onTriggerClick = Ext.form.ComboBox.prototype.onTriggerClick.createInterceptor(
+		function(){
+			return !this.readOnly;
+		}
+	);
+ ///  
+	
+	
+//http://zyjustin9.iteye.com/blog/2114562	
+Ext.isIE9 = Ext.isIE && navigator.userAgent.indexOf('MSIE 9')!=-1;  
+Ext.isIE10 = Ext.isIE && navigator.userAgent.indexOf('MSIE 10')!=-1;  	
+	Ext.override(Ext.menu.Menu, {  
+    autoWidth: function() {  
+        var el = this.el,  
+            ul = this.ul;  
+        if (!el) {  
+            return;  
+        }  
+        var w = this.width;  
+        if (w) {  
+            el.setWidth(w);  
+        } else if (Ext.isIE && !Ext.isIE8 && !Ext.isIE9 && !Ext.isIE10) {  
+            el.setWidth(this.minWidth);  
+            var t = el.dom.offsetWidth;  
+            el.setWidth(ul.getWidth() + el.getFrameWidth("lr"));  
+        }  
+    }  
+});  
+// chrome  
+Ext.override(Ext.menu.DateMenu, {    
+    render : function() {    
+        Ext.menu.DateMenu.superclass.render.call(this);    
+        if (Ext.isGecko || Ext.isSafari || Ext.isChrome) {    
+            this.picker.el.dom.childNodes[0].style.width = '178px';    
+            this.picker.el.dom.style.width = '178px';    
+        }    
+    }    
+});
 }
