@@ -62,7 +62,7 @@ function vpInit(){
     	//http://blog.csdn.net/scythev/article/details/4818610
     	treePanel.addListener('click',function(node,e){
     		openTab(node);
-    	})
+    	});
         var win = new Ext.Window({
             title    : '',
             closable : false,
@@ -124,6 +124,8 @@ function openTab(node){
 		iconCls="Applicationformadd";
 	}else if(node.id=='all_purchases'){
 		iconCls="Applicationviewcolumns";
+	}else if(node.id=='secretary_audit'){
+		iconCls="Commentedit";
 	}
 	var html='<iframe id="'+node.id+'_iframe" frameborder="0" width=100% height=100%></iframe>';
             tab = new Ext.Panel({
@@ -147,10 +149,13 @@ function tabActivate(p){
 		if(Ext.getDom("submit_iframe").src==""){
 			Ext.getDom("submit_iframe").src="/ExtJS/applications/CGSQ/TJCGSQ/index.jsp";
 		}
-	}
-	if(p.id=="all_purchases"){
+	}else if(p.id=="all_purchases"){
 		if(Ext.getDom("all_purchases_iframe").src==""){
 			Ext.getDom("all_purchases_iframe").src="/ExtJS/applications/CGSQ/SYCG/index.jsp";	
+		}
+	}else if(p.id=="secretary_audit"){
+		if(Ext.getDom("secretary_audit_iframe").src==""){
+			Ext.getDom("secretary_audit_iframe").src="/ExtJS/applications/CGSH/MSSH/index.jsp";	
 		}
 	}
 }

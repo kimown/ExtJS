@@ -1,5 +1,6 @@
 
 Ext.onReady(function(){
+	overrides();
 	Ext.QuickTips.init();
 	Ext.BLANK_IMAGE_URL = "/ExtJS/ext-2.0.2/air/samples/tasks/ext-2.0/resources/images/default/s.gif";
     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
@@ -119,7 +120,7 @@ function gridInit(){
         	 sortAscText : '正序',  
     		 sortDescText : '降序'
         },
-        sm:new Ext.grid.RowSelectionModel({singleSelect:true}),
+      //  sm:new Ext.grid.RowSelectionModel({singleSelect:true}),
         bbar:new Ext.PagingToolbar({
         	pageSize:15,
         	store:store,
@@ -251,7 +252,7 @@ function _tbar2Init(){
 		text:'删除',
 		iconCls:'Delete',
 		handler:function(){
-			
+			deleteRecords();
 		}
 	};
 	ar[k++]='-';
@@ -263,6 +264,54 @@ function _tbar2Init(){
 	}
 	return ar;
 }
+
+
+//ajax的loadmask
+/**
+ * http://www.sencha.com/forum/archive/index.php/t-89441.html
+ * http://www.sencha.com/forum/archive/index.php/t-80678.html
+ * http://www.sencha.com/forum/archive/index.php/t-9471.html
+ */
+function deleteRecords(){
+	var records=Ext.getCmp("grid").getSelectionModel().getSelections();
+	if(records.length==0){
+		Ext.Msg.alert("提示","请选中一行记录");
+		return;
+	}else{
+		Ext.MessageBox.confirm("提示","你确认删除选中的记录吗？",function(btn){
+			var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+			Ext.Ajax.on('beforerequest', myMask.show, myMask);
+			Ext.Ajax.on('requestcomplete', myMask.hide, myMask);
+			//Ext.Ajax.on('requestexception', myMask.hide, myMask);
+			
+			if(btn=='yes'){
+				for(var i=0;i<records.length;i++){
+					Ext.Ajax.request({
+					url:'logic.jsp',
+					method:'post',
+					params:{
+						type:'delete',						
+						wid:records[i].get("WID")
+					},
+					success:function(response){
+						var json=eval("("+response.responseText+")");
+						if(json.iresult==true){
+								//Ext.Msg.alert("提示",'&nbsp;&nbsp;&nbsp;&nbsp;删除成功&nbsp;&nbsp;&nbsp;&nbsp;');
+						}
+						var filter=" AND SGRBH='"+userid+"'";
+						Ext.getCmp("grid").getStore().reload({params:{start:0,limit:15,filter:filter}});	
+				},
+				failure:function(){
+					Ext.Msg.alert("提示",'与数据库交互失败，请稍后再试！');
+				}
+				})	
+				}
+			}
+		})
+	}
+	
+}
+
 function reset(){
 	var ar=['query_sgbh','query_yqsbmc','query_sgsj'];
 	for(var i=0;i<ar.length;i++){
@@ -308,11 +357,39 @@ function rendererOPERATION(value, cellmeta, record, rowIndex, columnIndex, store
 	var href='&nbsp;&nbsp;<a href="javascript:void(0);" onclick="view()" ><img src="/ExtJS/ext-2.0.2/resources/icons/zoom_in.png" /></a>';
 	return href;
 }
+function overrides(){
+	
+}
 /**
  * a 标签执行javascript的一些方法的区别，
  */
 function view(){
-	
+	Ext.override(Ext.PagingToolbar, {
+    // private
+    onClick : function(which){
+        var store = this.store;
+        switch(which){
+            case "first":
+                this.doLoad(0);
+            break;
+            case "prev":
+                this.doLoad(Math.max(0, this.cursor-this.pageSize));
+            break;
+            case "next":
+                this.doLoad(this.cursor+this.pageSize);
+            break;
+            case "last":
+                var total = store.getTotalCount();
+                var extra = total % this.pageSize;
+                var lastStart = extra ? (total - extra) : total-this.pageSize;
+                this.doLoad(lastStart);
+            break;
+            case "refresh":
+                this.doLoad(this.cursor);
+            break;
+        }
+    }			
+	})
 }
 /*
 http://atian25.iteye.com/blog/425760

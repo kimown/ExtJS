@@ -11,10 +11,10 @@
         leaf:true
     }]
 },{
-    text:'Custom Layouts',
+    text:'采购审核',
     children:[{
-        text:'Row',
-        id:'row',
+        text:'秘书审核',
+        id:'secretary_audit',
         leaf:true
     },{
         text:'Center',
