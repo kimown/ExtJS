@@ -119,6 +119,10 @@ function openTab(node){
 	if(node.id.indexOf("ynode-")!=-1){
 		return;
 	};
+	if(Ext.getCmp(node.id)){
+		tabs.setActiveTab(Ext.getCmp(node.id));
+		return;
+	}
 	var iconCls="";
 	if(node.id=='submit'){
 		iconCls="Applicationformadd";
@@ -126,6 +130,8 @@ function openTab(node){
 		iconCls="Applicationviewcolumns";
 	}else if(node.id=='secretary_audit'){
 		iconCls="Commentedit";
+	}else if(node.id=='Demo'){
+		iconCls="Cog";
 	}
 	var html='<iframe id="'+node.id+'_iframe" frameborder="0" width=100% height=100%></iframe>';
             tab = new Ext.Panel({
@@ -156,6 +162,10 @@ function tabActivate(p){
 	}else if(p.id=="secretary_audit"){
 		if(Ext.getDom("secretary_audit_iframe").src==""){
 			Ext.getDom("secretary_audit_iframe").src="/ExtJS/applications/CGSH/MSSH/index.jsp";	
+		}
+	}else if(p.id=="Demo"){
+		if(Ext.getDom("Demo_iframe").src==""){
+			Ext.getDom("Demo_iframe").src="/ExtJS/applications/CGSH/MSSH/index.jsp";	
 		}
 	}
 }

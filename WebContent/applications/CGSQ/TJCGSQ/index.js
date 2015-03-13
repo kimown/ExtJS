@@ -61,12 +61,15 @@ function formInit(){
             text: '暂存',
             iconCls:'Disk',
             handler:function(){
-            	save();
+            	save("temp");
             }
             
         },{
             text: '提交',
-            iconCls:'Accept'
+            iconCls:'Accept',
+            handler:function(){
+            	save("submit");
+            }
         }]
     });
     simple.render(document.body);
@@ -74,7 +77,12 @@ function formInit(){
     formeventInit();
 }
 
-function save(){
+function save(type){
+	if(type=="temp"){
+		Ext.fly("SHZT").dom.value="0";
+	}else{
+		Ext.fly("SHZT").dom.value="10";
+	}
 	if(simple.form.isValid()){
 		//http://my.oschina.net/journeyAya/blog/7686
 		simple.form.submit({
@@ -416,6 +424,10 @@ function items2Init(){
 	ar[k++]=new Ext.form.Hidden({
 		id:'FZRBH'
 	})
+	ar[k++]=new Ext.form.Hidden({
+		id:'SHZT'	
+	})
+	
 	ar[k++]=new Ext.form.Hidden({
 		id:'type',
 		value:'save'
