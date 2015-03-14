@@ -6,7 +6,7 @@
 %>
 <html>
 <head>
-
+<!--页面出现白板 http://blog.csdn.net/xiafuyuan/article/details/8929452 -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>提交采购申请</title>
 <script type="text/javascript" src="/ExtJS/ext-2.0.2/adapter/ext/ext-base.js"></script>
@@ -20,7 +20,7 @@
 </head>
 <body scroll="no" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <div id="tabs" style="position:absolute;"></div>
-<div id="div_main"></div>
+<div id="form"></div>
 </body>
 <script type="text/javascript">
 var width=document.body.clientWidth;
