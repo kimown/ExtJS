@@ -21,4 +21,11 @@
         id:'center',
         leaf:true
     }]
+},{
+    text:'Demo',
+    children:[{
+        text:'Demo',
+        id:'Demo',
+        leaf:true
+    }]
 }]
