@@ -20,7 +20,7 @@ function initTab(){
 		,{name:'已审核',id:'YSH'}
 		]
 	for(var i=0;i<tabList.length;i++){
-		var html='<div id=\'' + tabList[i].id + '_Grid\' style="HEIGHT:90%"></div>';
+		var html='<div id=\'' + tabList[i].id + '_Grid\' style="HEIGHT:92%"></div>';
 		shtab.add({
 			id : tabList[i].id
 			,grid : null
@@ -52,10 +52,10 @@ function initMXGrid(tab){
 			id:tab.id+'_Grid',
 			el:tab.id+'_Grid',
 			layout:'fit',
-			width:document.body.clientWidth,
-			height:document.body.clientHeight*0.9,
+			//width:document.body.clientWidth,
+			//height:document.body.clientHeight-40,
 			closeAction:'hide',
-			//plain:true,
+			plain:true,
 			buttons:[{
 				text:'send'
 			},{
