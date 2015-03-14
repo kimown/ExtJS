@@ -165,10 +165,6 @@ function tabActivate(p){
 		}
 	}else if(p.id=="Demo"){
 		if(Ext.getDom("Demo_iframe").src==""){
-			Ext.getDom("Demo_iframe").src="/ExtJS/applications/CGSH/MSSH/index.jsp";	
-		}
-	}else if(p.id=="Demo"){
-		if(Ext.getDom("Demo_iframe").src==""){
 			Ext.getDom("Demo_iframe").src="/ExtJS/applications/DEMO/Demo1/index.jsp";	
 		}
 	}

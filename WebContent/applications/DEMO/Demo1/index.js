@@ -20,13 +20,14 @@ function initTab(){
 		,{name:'已审核',id:'YSH'}
 		]
 	for(var i=0;i<tabList.length;i++){
+		var html='<div id=\'' + tabList[i].id + '_Grid\' style="HEIGHT:90%"></div>';
 		shtab.add({
 			id : tabList[i].id
 			,grid : null
 			,listeners : {activate : tabActivate}
 			,iconCls :'Flagad'
 			,title : '<image src=/epstar/web/apps/images/database_table.gif>&nbsp;'+ tabList[i].name
-			,html : '<div id=\'' + tabList[i].id + '_Grid\' style="HEIGHT:90%"></div>'
+			,html : html
 		});
 	}
     shtab.render(); 
@@ -45,14 +46,14 @@ function tabActivate(tab){
 
 function initMXGrid(tab){
 	if (!tab.mxgrid) {
-		Ext.getCmp(tab.id+'_Grid').
-		var win=new Ext.Window({
+		//Ext.getCmp(tab.id+'_Grid').
+		 win=new Ext.Window({
 			title:'111',
 			id:tab.id+'_Grid',
-			applyTo:tab.id+'_Grid',
+			el:tab.id+'_Grid',
 			layout:'fit',
-			width:width,
-			height:height,
+			width:document.body.clientWidth,
+			height:document.body.clientHeight*0.9,
 			closeAction:'hide',
 			//plain:true,
 			buttons:[{
@@ -63,5 +64,5 @@ function initMXGrid(tab){
 		})
 	    tab.mxgrid = win;
 	} 
-    tab.mxgrid.render();
+    tab.mxgrid.show();
 }
