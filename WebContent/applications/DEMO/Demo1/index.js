@@ -20,13 +20,13 @@ function initTab(){
 		,{name:'已审核',id:'YSH'}
 		]
 	for(var i=0;i<tabList.length;i++){
-		var html='<div id=\'' + tabList[i].id + '_Grid\' style="HEIGHT:92%"></div>';
+		var html='<div id=\'' + tabList[i].id + '_Grid\' style="HEIGHT:92%;";></div>';
 		shtab.add({
 			id : tabList[i].id
 			,grid : null
 			,listeners : {activate : tabActivate}
 			,iconCls :'Flagad'
-			,title : '<image src=/epstar/web/apps/images/database_table.gif>&nbsp;'+ tabList[i].name
+			,title :  tabList[i].name
 			,html : html
 		});
 	}
@@ -51,9 +51,9 @@ function initMXGrid(tab){
 			title:'111',
 			id:tab.id+'_Grid',
 			el:tab.id+'_Grid',
-			layout:'fit',
-			//width:document.body.clientWidth,
-			//height:document.body.clientHeight-40,
+			//layout:'fit',
+			width:document.body.clientWidth,
+			height:document.body.clientHeight*.95,
 			closeAction:'hide',
 			plain:true,
 			buttons:[{
@@ -62,6 +62,8 @@ function initMXGrid(tab){
 				text:'cancel'
 			}]
 		})
+		
+		win.setPosition(0,28);
 	    tab.mxgrid = win;
 	} 
     tab.mxgrid.show();
