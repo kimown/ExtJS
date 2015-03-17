@@ -100,14 +100,26 @@ function tabpanelInit(){
             plain:true,
             activeTab: 0,
             height:300,
-            items:[{
-            xtype:'htmleditor',
-            title:'htmleditor',
-            id:'bio',
-            fieldLabel:'Biography',
-            height:200,
-            anchor:'98%'            	
-            }]
+            items:[new Ext.FormPanel({
+            	labelWidth:75,
+            	frame:true,
+            	title:'FormPanel',
+            	defaultType:'textfield',
+            	items:[{
+            		xtype:'button',
+            		text:"保存",
+            		handler:function(){
+            			saveClob();
+            		}
+            	},{
+           			 xtype:'htmleditor',
+           			 title:'htmleditor',
+           			 id:'clob',
+            		 fieldLabel:'Biography',
+          			 height:100,
+           			 anchor:'98%'  
+            	}]
+            })]
 		}],	
 		modal : true,
 		autoScroll: false ,
@@ -128,6 +140,27 @@ function tabpanelInit(){
 	}
 	Ext.getCmp("tabpanel").activate(1);
 		tabwin.show();
+}
+
+function saveClob(){
+	var clob=Ext.fly('clob').dom.value;
+	Ext.Ajax.request({
+		url:'logic.jsp',
+		method:'post',
+		params:{
+			type:'saveClob',						
+			clob:clob
+		},
+		success:function(response){
+			var obj=Ext.decode(response.responseText)
+			if(obj.iresult==true){
+				Ext.Msg.alert("提示",'&nbsp;&nbsp;&nbsp;&nbsp;保存成功&nbsp;&nbsp;&nbsp;&nbsp;');
+			}
+		},
+		failure:function(){
+			Ext.Msg.alert("提示",'与数据库交互失败，请稍后再试！');
+		}
+	})		
 }
 //renderTo和applyTo的区别
 /*http://www.jb51.net/article/21749.htm
