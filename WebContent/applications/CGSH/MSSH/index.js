@@ -7,11 +7,12 @@ Ext.onReady(function(){
     gridInit();
 });
 
-function gridInit(){ 
+function gridInit(){
+	var filter="AND SHZT='10'";
 	var _tbar2 = new Ext.Toolbar(_tbar2Init());
     var store = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy({
-			url: 'paging.jsp'
+			url: 'paging.jsp?filter='+filter
 		}),
 		reader: new Ext.data.JsonReader({
 			totalProperty: 'totalCount',

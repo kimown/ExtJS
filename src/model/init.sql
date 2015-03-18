@@ -51,3 +51,14 @@ BEGIN
   FROM
     dual;
 END;
+--创建用户与用户组的对应表
+create table T_SYS_U2UG
+(
+  wid      VARCHAR2(40) not null,
+  ugroupid VARCHAR2(40) not null,
+  userid   VARCHAR2(40) not null,
+  name     VARCHAR2(300)
+)
+--创建用户组表
+T_SYS_UGROUP_SW
+

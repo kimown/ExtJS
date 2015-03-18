@@ -1,8 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	String username=(String)session.getAttribute("username");
+<%@page import="com.imooc.service.implement.DBServiceImplement" %>
 
+<%
+	String userid=(String)session.getAttribute("username");
+	DBServiceImplement db=new DBServiceImplement();
+	String userinfo=db.getUserInfo(userid);
+	String[] ar=userinfo.split(",");
+	String username=ar[0];
+	String userGroup=ar[1];
 %>
 <html>
 <head>
@@ -28,6 +34,8 @@
 <script type="text/javascript">
 var width=document.body.clientWidth;
 var height=document.body.clientHeight;
-var userid="<%=username%>";
+var userid="<%=userid%>";
+var username="<%=username%>";
+var userGroup="<%=userGroup%>";
 </script>
 </html>

@@ -2,7 +2,9 @@ package com.imooc.service.implement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.imooc.service.DBService;
 import com.imooc.db.DBUtil;
@@ -74,4 +76,48 @@ public class DBServiceImplement implements DBService{
 		System.out.println("保存CLOB字段结果："+result);
 	}
 
+	public String getUserInfo(String userid) {
+		// TODO Auto-generated method stub
+		String sql="SELECT T.NAME AS U,TT.NAME AS UG FROM T_SYS_U2UG T LEFT JOIN T_SYS_UGROUP_SW TT ON T.UGROUPID=TT.ID WHERE USERID='"+userid+"'";
+		DBUtil db=new DBUtil();
+		Connection conn=db.getConnection();
+		ResultSet rs=null;
+		PreparedStatement pstmt=null;
+		String result="";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			if(rs.next()){
+				result=rs.getString("U");
+				result+=","+rs.getString("UG");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			/*
+			try{
+				/*
+				if(rs!=null){
+					rs.close();
+				}
+				if(pstmt!=null){
+					pstmt.close();
+				}
+				if(conn!=null){
+					conn.commit();
+					conn.close();
+				}
+			
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			 */
+		}
+		return result;
+	}
+	public static void main(String[] args){
+		//DBServiceImplement db=new DBServiceImplement();
+		//System.out.println(db.getUserInfo("200611485"));
+	}
 }
