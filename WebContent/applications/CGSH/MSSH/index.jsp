@@ -30,6 +30,8 @@
 </head>
 <body>
 <div id="grid-example"></div>
+<div id="hello-win"></div>
+<div id="hello-tabs"></div>
 </body>
 <script type="text/javascript">
 var width=document.body.clientWidth;

@@ -250,19 +250,12 @@ function _tbar2Init(){
 	var ar=[];
 	var k=0;
 	ar[k++]={
-		text:'删除',
-		iconCls:'Delete',
+		text:'批量分配',
+		iconCls:'Wrench',
 		handler:function(){
-			deleteRecords();
+			batchAudit();
 		}
 	};
-	ar[k++]='-';
-	ar[k++]={
-		text:'重置',
-		handler:function(){
-			
-		}
-	}
 	return ar;
 }
 
@@ -273,25 +266,68 @@ function _tbar2Init(){
  * http://www.sencha.com/forum/archive/index.php/t-80678.html
  * http://www.sencha.com/forum/archive/index.php/t-9471.html
  */
-function deleteRecords(){
+var win;
+function batchAudit(){
 	var records=Ext.getCmp("grid").getSelectionModel().getSelections();
 	if(records.length==0){
 		Ext.Msg.alert("提示","请选中一行记录");
 		return;
 	}else{
-		Ext.MessageBox.confirm("提示","你确认删除选中的记录吗？",function(btn){
+		        if(!win){
+            win = new Ext.Window({
+                applyTo     : 'hello-win',
+                layout      : 'fit',
+                width       : 500,
+                height      : 300,
+                closeAction :'hide',
+                //plain       : true,
+                modal       : true,
+                items       : {
+                	xtype:'tabpanel',
+                	activeTab:0,
+                	defaults:{autoHeight:true, bodyStyle:'padding:10px'},
+                	items:[{
+                		title:'Personal Details',
+                		layout:'form',
+               		    defaults: {width: 230},
+                		defaultType: 'textfield',
+                		items:[{
+                    		fieldLabel: 'First Name',
+                    		name: 'first',
+                   			 allowBlank:false,
+                   			 value: 'Jack'
+               		 }]
+                	}]
+                },
+                buttons: [{
+                    text     : 'Submit',
+                    disabled : true
+                },{
+                    text     : 'Close',
+                    handler  : function(){
+                        win.hide();
+                    }
+                }]
+            });
+        }
+        win.show();
+	}
+}
+
+
+function a(){
+
 			var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
 			Ext.Ajax.on('beforerequest', myMask.show, myMask);
 			Ext.Ajax.on('requestcomplete', myMask.hide, myMask);
 			//Ext.Ajax.on('requestexception', myMask.hide, myMask);
 			
-			if(btn=='yes'){
 				for(var i=0;i<records.length;i++){
 					Ext.Ajax.request({
 					url:'logic.jsp',
 					method:'post',
 					params:{
-						type:'delete',						
+						type:'batchAudit',						
 						wid:records[i].get("WID")
 					},
 					success:function(response){
@@ -299,7 +335,7 @@ function deleteRecords(){
 						if(json.iresult==true){
 								//Ext.Msg.alert("提示",'&nbsp;&nbsp;&nbsp;&nbsp;删除成功&nbsp;&nbsp;&nbsp;&nbsp;');
 						}
-						var filter=" AND SGRBH='"+userid+"'";
+						var filter=" AND SHZT='10'";
 						Ext.getCmp("grid").getStore().reload({params:{start:0,limit:15,filter:filter}});	
 				},
 				failure:function(){
@@ -307,12 +343,8 @@ function deleteRecords(){
 				}
 				})	
 				}
-			}
-		})
-	}
 	
 }
-
 function reset(){
 	var ar=['query_sgbh','query_yqsbmc','query_sgsj'];
 	for(var i=0;i<ar.length;i++){
