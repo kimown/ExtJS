@@ -277,8 +277,8 @@ function batchAudit(){
             win = new Ext.Window({
                 applyTo     : 'hello-win',
                 layout      : 'fit',
-                width       : 500,
-                height      : 300,
+                width       : 400,
+                height      : 200,
                 closeAction :'hide',
                 //plain       : true,
                 modal       : true,
@@ -287,21 +287,35 @@ function batchAudit(){
                 	activeTab:0,
                 	defaults:{autoHeight:true, bodyStyle:'padding:10px'},
                 	items:[{
-                		title:'Personal Details',
+                		title:'分配经办人',
                 		layout:'form',
                		    defaults: {width: 230},
                 		defaultType: 'textfield',
+                		labelAlign:'right',
                 		items:[{
-                    		fieldLabel: 'First Name',
+                    		fieldLabel: '经办人',
+                    		id:'jbr',
                     		name: 'first',
                    			 allowBlank:false,
                    			 value: 'Jack'
-               		 }]
+               		 		},{
+                    		fieldLabel: '经办人编号',
+                    		id:'jbrbh',
+                    		name: 'first'
+               		 		},{
+                    		fieldLabel: '经办人电话',
+                    		id: 'jbrdh',
+                   			 allowBlank:false,
+                   			 value: ''
+               		 		}]
                 	}]
                 },
                 buttons: [{
-                    text     : 'Submit',
-                    disabled : true
+                    text     : '提交',
+                    disabled : false,
+                    handler  :function(){
+                    	submit();
+                    }
                 },{
                     text     : 'Close',
                     handler  : function(){
@@ -314,7 +328,13 @@ function batchAudit(){
 	}
 }
 
-
+function submit(){
+	var ar=['jbr','jbrbh','jbrdh'];
+	var param=[];
+	for(var i=0;i<ar.length;i++){
+		param[ar[i]]=Ext.query(ar[i]).dom.value;
+	}
+}
 function a(){
 
 			var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
