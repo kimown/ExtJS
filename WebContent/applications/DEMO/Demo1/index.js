@@ -79,7 +79,52 @@ function itemsInit(){
 			tabpanelInit();
 		}
 	})
+	
+	ar[k++]=new Ext.Button({
+		iconCls  :'Flagaf',
+		el:'form',
+		text:'点击',
+		tooltip:'点击展示htmleditor',
+		handler:function(){
+			panelIn();
+		}
+	})
 	return ar;
+}
+
+var _window;
+function panelIn(){
+	if(!_window){
+		_window=new Ext.Window({
+		title: '1',
+		width: 550,
+        height: 300,
+		minWidth: 100,
+		minHeight: 100, 
+		metaReadingType:1,
+		closable:true,
+		closeAction: 'close',
+		layout: 'fit',
+		items: [{
+			xtype:'tabpanel',
+			id:'panel',
+            plain:true,
+            activeTab: 0,
+            height:300,
+            items:[{
+		title:'autoLoad加载html',
+		autoLoad:{
+			url:'a.html',
+			scripts:true
+		}
+	}]}],
+        modal : true,
+		autoScroll: false ,
+		buttonAlign : 'center',
+		closable :false 
+	})
+	}
+	_window.show();
 }
 
 var tabwin;
