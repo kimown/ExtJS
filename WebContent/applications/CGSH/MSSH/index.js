@@ -274,6 +274,20 @@ function batchAudit(){
 		return;
 	}else{
 		        if(!win){
+		        	//http://extjs.org.cn/node/641
+		    var store=new Ext.data.Store({
+		    	proxy:new Ext.data.HttpProxy({
+		    		url:'ajax.jsp?type=root'
+		    	}),
+		    	reader:new Ext.data.JsonReader({
+		    		root:'root',
+		    		totalProperty:'totalCount'
+		    	},[
+		    		{name:'ZGH',mapping:'ZGH'},
+		    		{name:'XM',mapping:'XM'},
+		    		{name:'SJ',mapping:'SJ'}
+		    	])
+		    });
             win = new Ext.Window({
                 applyTo     : 'hello-win',
                 layout      : 'fit',
@@ -292,22 +306,36 @@ function batchAudit(){
                		    defaults: {width: 230},
                 		defaultType: 'textfield',
                 		labelAlign:'right',
-                		items:[{
-                    		fieldLabel: '经办人',
-                    		id:'jbr',
-                    		name: 'first',
-                   			 allowBlank:false,
-                   			 value: 'Jack'
-               		 		},{
-                    		fieldLabel: '经办人编号',
-                    		id:'jbrbh',
-                    		name: 'first'
-               		 		},{
-                    		fieldLabel: '经办人电话',
-                    		id: 'jbrdh',
-                   			 allowBlank:false,
-                   			 value: ''
-               		 		}]
+                		items : [new Ext.form.ComboBox({
+                									tpl:'<tpl for="."><div ext:qtip="职工号：{ZGH}， 手机：{SJ}" class="x-combo-list-item">{XM}</div></tpl>',
+													store : store,
+													id:'jbr',
+													valueField:'ZGH',
+													displayField : 'XM',
+													fieldLabel:'经办人',
+													typeAhead : true,
+													mode : 'remote', //如果ComboBox加载本地数据 设置为'local' (默认值为 'remote'，它将从服务器加载数据) 
+													forceSelection : true,
+													triggerAction : 'all',
+													emptyText : 'Select ...',
+													selectOnFocus : true,
+													listeners:{
+													"select":function(combo,record,index){
+													       //http://www.iteye.com/problems/94165
+														Ext.fly("jbrbh").dom.value=record.get("ZGH");
+														Ext.fly("jbrdh").dom.value=record.get("SJ");
+													}
+													}
+												}), {
+											fieldLabel : '经办人编号',
+											id : 'jbrbh',
+											name : 'first'
+										}, {
+											fieldLabel : '经办人电话',
+											id : 'jbrdh',
+											allowBlank : false,
+											value : ''
+										}]
                 	}]
                 },
                 buttons: [{
@@ -317,12 +345,13 @@ function batchAudit(){
                     	submit();
                     }
                 },{
-                    text     : 'Close',
+                    text     : '关闭',
                     handler  : function(){
                         win.hide();
                     }
                 }]
             });
+            
         }
         win.show();
 	}
@@ -330,10 +359,28 @@ function batchAudit(){
 
 function submit(){
 	var ar=['jbr','jbrbh','jbrdh'];
-	var param=[];
+	var params={"type":"submit"};
+	params["wid"]=Ext.getCmp("grid").getSelectionModel().getSelections()[0].get("WID");
 	for(var i=0;i<ar.length;i++){
-		param[ar[i]]=Ext.query(ar[i]).dom.value;
+		params[ar[i]]=Ext.fly(ar[i]).dom.value;
+	
 	}
+	Ext.Ajax.request({
+		url:'logic.jsp',
+		method:'post',
+		params: params,
+		success:function(response){
+			var rs=Ext.decode(response.responseText);
+			if(rs.iresult==true){
+				Ext.Msg.alert("提示","&nbsp;&nbsp;&nbsp;&nbsp;提交成功&nbsp;&nbsp;&nbsp;&nbsp;",function(){
+					win.hide();
+					var filter=" AND SHZT='10'";
+					Ext.getCmp("grid").getStore().reload({params:{start:0,limit:15,filter:filter}});	
+				})
+			}
+		}
+	    
+	})
 }
 function a(){
 
