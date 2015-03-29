@@ -17,8 +17,8 @@
         id:'secretary_audit',
         leaf:true
     },{
-        text:'Center',
-        id:'center',
+        text:'确定采购方式',
+        id:'decide_method',
         leaf:true
     }]
 },{

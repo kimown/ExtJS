@@ -134,6 +134,8 @@ function openTab(node){
 		iconCls="Cog";
 	}else if(node.id=='dict'){
 		iconCls="Cogedit";
+	}else if(node.id=='decide_method'){
+		iconCls="Pageedit";
 	}
 	var html='<iframe id="'+node.id+'_iframe" frameborder="0" width=100% height=100%></iframe>';
             tab = new Ext.Panel({
@@ -172,6 +174,10 @@ function tabActivate(p){
 	}else if(p.id=="dict"){
 		if(Ext.getDom("dict_iframe").src==""){
 			Ext.getDom("dict_iframe").src="/ExtJS/applications/XTGL/ZDWH/index.jsp";	
+		}
+	}else if(p.id=="decide_method"){
+		if(Ext.getDom("decide_method_iframe").src==""){
+			Ext.getDom("decide_method_iframe").src="/ExtJS/applications/CGSH/QDCGFS/index.jsp";	
 		}
 	}
 }

@@ -24,7 +24,7 @@
 	}
 	if(type.equals("root")){
 		Connection conn=DBUtil.getConnection();
-		String sql="SELECT A.XM,A.ZGH,B.SJ FROM T_GGGL_CGYXX A LEFT JOIN T_JZG_JBXX B ON A.ZGH=B.ZGH";
+		String sql="SELECT A.XM,A.ZGH,B.SJ,B.XQDM FROM T_GGGL_CGYXX A LEFT JOIN T_JZG_JBXX B ON A.ZGH=B.ZGH";
 		String totalcountsql="SELECT count(*) FROM T_GGGL_CGYXX A LEFT JOIN T_JZG_JBXX B ON A.ZGH=B.ZGH";
 		PreparedStatement pstmt=conn.prepareStatement(sql);
 		PreparedStatement pstmt1=conn.prepareStatement(totalcountsql);
@@ -40,7 +40,7 @@
 			ResultSetMetaData rsmd=rs.getMetaData();
 			int numberOfColumns=rsmd.getColumnCount();
 			JSONObject root=new JSONObject();
-			String[] ar={"ZGH","XM","SJ"};
+			String[] ar={"ZGH","XM","SJ","XQDM"};
 			for(int i=0;i<ar.length;i++){
 				root.put(ar[i], rs.getString(ar[i])==null?"":rs.getString(ar[i]));
 			}

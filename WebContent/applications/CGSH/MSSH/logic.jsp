@@ -42,7 +42,7 @@
 		String jbrbh=request.getParameter("jbrbh");
 		String jbrdh=request.getParameter("jbrdh");
 		String wid=request.getParameter("wid");
-		String sql="UPDATE T_CGZXT_CGSQB SET JBR='"+jbr+"',JBRBH='"+jbrbh+"',jbrdh='"+jbrdh+"' WHERE WID='"+wid+"'";
+		String sql="UPDATE T_CGZXT_CGSQB SET JBR='"+jbr+"',JBRBH='"+jbrbh+"',jbrdh='"+jbrdh+"',SHZT='20' WHERE WID='"+wid+"'";
 		System.out.println("执行sql="+sql);
 		Connection conn=DBUtil.getConnection();
 		PreparedStatement pstmt=conn.prepareStatement(sql);

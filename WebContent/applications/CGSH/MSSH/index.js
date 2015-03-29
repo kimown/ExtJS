@@ -285,14 +285,15 @@ function batchAudit(){
 		    	},[
 		    		{name:'ZGH',mapping:'ZGH'},
 		    		{name:'XM',mapping:'XM'},
-		    		{name:'SJ',mapping:'SJ'}
+		    		{name:'SJ',mapping:'SJ'},
+		    		{name:'XQDM',mapping:'XQDM'}
 		    	])
 		    });
             win = new Ext.Window({
                 applyTo     : 'hello-win',
                 layout      : 'fit',
                 width       : 400,
-                height      : 200,
+                height      : 300,
                 closeAction :'hide',
                 //plain       : true,
                 modal       : true,
@@ -324,6 +325,18 @@ function batchAudit(){
 													       //http://www.iteye.com/problems/94165
 														Ext.fly("jbrbh").dom.value=record.get("ZGH");
 														Ext.fly("jbrdh").dom.value=record.get("SJ");
+														var syxq=Ext.getCmp("grid").getSelectionModel().getSelections()[0].get("K_SYXQ");
+														var xqdm=record.get("XQDM");
+														if(syxq!=xqdm){
+															Ext.Msg.alert("提示",'经办人所在校区与使用校区不同，分配经办人理由为必填项！',function(){
+																Ext.getCmp('fpjbrly').setVisible(true);
+																Ext.getCmp('fpjbrly').focus();
+																Ext.getCmp('fpjbrly').getEl().up('.x-form-item').setDisplayed(true)
+															})
+														}else{
+														//	Ext.getCmp('fpjbrly').setVisible(false);
+															Ext.getCmp('fpjbrly').getEl().up('.x-form-item').setDisplayed(false);
+														}
 													}
 													}
 												}), {
@@ -335,17 +348,27 @@ function batchAudit(){
 											id : 'jbrdh',
 											allowBlank : false,
 											value : ''
+										},{
+						            		xtype: 'textarea',
+           								    hideLabel: false,
+           								    id:'fpjbrly',
+           								    fieldLabel:'分配经办人理由',
+           								    height:'100',
+            								name: 'msg'
+            								//anchor: '100% -53'  // anchor width by percentage and height by raw adjustment					
 										}]
                 	}]
                 },
                 buttons: [{
                     text     : '提交',
                     disabled : false,
+                    iconCls  :'Accept',
                     handler  :function(){
                     	submit();
                     }
                 },{
                     text     : '关闭',
+                    iconCls  : 'Cancel',
                     handler  : function(){
                         win.hide();
                     }
@@ -354,14 +377,23 @@ function batchAudit(){
             
         }
         win.show();
+        Ext.getCmp('fpjbrly').setVisible(false);
+		Ext.getCmp('fpjbrly').getEl().up('.x-form-item').setDisplayed(false)
 	}
 }
 
 function submit(){
 	var ar=['jbr','jbrbh','jbrdh'];
+	var arr=['经办人','经办人编号','经办人电话'];
 	var params={"type":"submit"};
 	params["wid"]=Ext.getCmp("grid").getSelectionModel().getSelections()[0].get("WID");
 	for(var i=0;i<ar.length;i++){
+		if(Ext.getCmp(ar[i]).getValue()==''){
+			Ext.MessageBox.alert("提示",arr[i]+"为必填项！",function(){
+				Ext.getCmp(ar[i]).focus();
+			})
+			return;
+		}
 		params[ar[i]]=Ext.fly(ar[i]).dom.value;
 	
 	}
@@ -501,6 +533,12 @@ http://www.cnblogs.com/jianglan/archive/2011/07/28/2119101.html
 
 */
 
+
+//http://www.sencha.com/forum/showthread.php?17396-Hiding-the-combobox-and-the-label-sometime
+/**
+ * 隐藏fieldLabel
+ * 
+ */
 
 
 /**
