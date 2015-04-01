@@ -136,6 +136,8 @@ function openTab(node){
 		iconCls="Cogedit";
 	}else if(node.id=='decide_method'){
 		iconCls="Pageedit";
+	}else if(node.id=='audit'){
+		iconCls="Pagelightning";
 	}
 	var html='<iframe id="'+node.id+'_iframe" frameborder="0" width=100% height=100%></iframe>';
             tab = new Ext.Panel({
@@ -178,6 +180,10 @@ function tabActivate(p){
 	}else if(p.id=="decide_method"){
 		if(Ext.getDom("decide_method_iframe").src==""){
 			Ext.getDom("decide_method_iframe").src="/ExtJS/applications/CGSH/QDCGFS/index.jsp";	
+		}
+	}else if(p.id=="audit"){
+		if(Ext.getDom("audit_iframe").src==""){
+			Ext.getDom("audit_iframe").src="/ExtJS/applications/CGSH/CGSQSH/index.jsp";	
 		}
 	}
 }

@@ -20,6 +20,10 @@
         text:'确定采购方式',
         id:'decide_method',
         leaf:true
+    },{
+        text:'采购申请审核',
+        id:'audit',
+        leaf:true
     }]
 },{
 	text:'系统管理',
