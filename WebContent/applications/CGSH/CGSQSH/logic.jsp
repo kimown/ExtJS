@@ -1,4 +1,5 @@
 
+<%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.PreparedStatement"%><%@page import="com.imooc.db.Md5" %>
@@ -34,5 +35,63 @@
 			obj.put("iresult",false);
 		}
 		response.getWriter().print(obj);
+	}
+	
+	
+	if(type.equals("CGYXX")){
+		Connection conn=DBUtil.getConnection();
+		String sql="select t.ZGH,t.XM,a.SJ from T_GGGL_CGYXX t LEFT JOIN t_jzg_jbxx a ON t.zgh=a.zgh";
+		String totalcountsql="SELECT COUNT(1) FROM T_GGGL_CGYXX";
+		PreparedStatement pstmt=conn.prepareStatement(sql);
+		PreparedStatement pstmt1=conn.prepareStatement(totalcountsql);
+		ResultSet rs=pstmt.executeQuery();
+		ResultSet rs1=pstmt1.executeQuery();
+		String totalcount="";
+		if(rs1.next()){
+			totalcount=rs1.getString(1);
+		}
+		String json="{\"totalcount\":"+totalcount+",";
+		json+="\"CGYXX\":[";
+		while(rs.next()){
+			json+="{\"ZGH\":\""+rs.getString("ZGH")+"\",\"XM\":\""+rs.getString("XM")+"\",\"SJ\":\""+rs.getString("SJ")+"\"},";
+		}
+		if(rs!=null){
+			try{
+				rs.close();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+		if(rs1!=null){
+			try{
+				rs1.close();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+		if(pstmt!=null){
+			try{
+				pstmt.close();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+		if(pstmt1!=null){
+			try{
+				pstmt1.close();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+		/*
+		if(conn!=null){
+			try{
+			//	conn.close();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		}*/
+		json=json.substring(0,json.length()-1)+"]}";
+		response.getWriter().print(json);
 	}
 %>

@@ -243,10 +243,17 @@ function _tbar2Init(){
 	var ar=[];
 	var k=0;
 	ar[k++]={
-		text:'确定采购方式',
-		iconCls:'Wrench',
+		text:'批量通过',
+		iconCls:'Bulletstart',
 		handler:function(){
-			batchAudit();
+			batchAudit("TG");
+		}
+	};
+	ar[k++]={
+		text:'批量不通过',
+		iconCls:'Bulletstop',
+		handler:function(){
+			batchAudit("BTG");
 		}
 	};
 	return ar;
@@ -260,7 +267,7 @@ function _tbar2Init(){
  * http://www.sencha.com/forum/archive/index.php/t-9471.html
  */
 var win;
-function batchAudit(){
+function batchAudit(type){
 	var records=Ext.getCmp("grid").getSelectionModel().getSelections();
 	if(records.length==0){
 		Ext.Msg.alert("提示","请选中一行记录");
@@ -268,20 +275,22 @@ function batchAudit(){
 	}else{
 		        if(!win){
 		        	//http://extjs.org.cn/node/641
-	var ds_cgfs=new Ext.data.Store({
+	var ds_cgyxx=new Ext.data.Store({
 		proxy:new Ext.data.HttpProxy({
-			url:'ajax.jsp?type=CGFS'
+			url:'logic.jsp?type=CGYXX'
 		}),
 		reader:new Ext.data.JsonReader({
-			root:'CGFS',
+			root:'CGYXX',
 			totalProperty:'totalCount',
 			id:''
 		},[
-			{name:'__BM',mapping:'BM'},
-			{name:'__MC',mapping:'MC'}
+			{name:'__ZGH',mapping:'ZGH'},
+			{name:'__XM',mapping:'XM'},
+			{name:'__SJ',mapping:'SJ'}
 		])
 	});
-	ds_cgfs.load();
+	ds_cgyxx.load();
+	
             win = new Ext.Window({
                 applyTo     : 'hello-win',
                 layout      : 'fit',
@@ -295,26 +304,41 @@ function batchAudit(){
                 	activeTab:0,
                 	defaults:{autoHeight:true, bodyStyle:'padding:10px'},
                 	items:[{
-                		title:'确定采购方式',
+                		title:'',
+                		id:'title',
                 		layout:'form',
                		    defaults: {width: 230},
                 		defaultType: 'textfield',
                 		labelAlign:'right',
-                		items : [new Ext.form.ComboBox({
-													fieldLabel : '采购方式',
-													labelAlign : 'right',
-													store : ds_cgfs,
-													hiddenName : 'CGFS', // submit()会提交hiddenName作为key，value作为值
-													id : 'I_CGFS',
-													name : 'CGFS',
-													emptyText : '请选择',
-													mode : 'local',
-													allowBlank : false,
-													triggerAction : 'all',
-													valueField : '__BM',
-													displayField : '__MC',
-													forceSelection : true
-												})]
+                		items : [{
+                					xtype : 'textarea',
+									hideLabel : false,
+									fieldLabel:'审核意见',
+									name : 'msg',
+									height:90
+							}, new Ext.form.ComboBox({
+															fieldLabel : '经办人',
+															labelAlign : 'right',
+															store : ds_cgyxx,
+															hiddenName : 'CGYXX', // submit()会提交hiddenName作为key，value作为值
+															id : 'I_CGYXX',
+															emptyText : '请选择',
+															mode : 'local',
+															allowBlank : false,
+															triggerAction : 'all',
+															valueField : '__ZGH',
+															displayField : '__XM',
+															forceSelection : true,
+															listeners :{
+																"select":function(combo,record,index){
+																		
+																}
+															}
+														}), {
+											fieldLabel : '手机号',
+											id : 'SJH',
+											allowBlank : false
+										}]
                 	}]
                 },
                 buttons: [{
@@ -335,6 +359,13 @@ function batchAudit(){
             
         }
         win.show();
+        var a="";
+        if(type=="TG"){
+        	a="通过";
+        }else if(type=="BTG"){
+        	a="不通过";
+        }
+        Ext.getCmp("title").setTitle("审核意见---"+a);
 	}
 }
 

@@ -2,13 +2,9 @@ package com.practise;
 
 public class Practise {
 	public static void main(String[] args){
-		String[] ar=new String[3];
-		ar[0]="welcome";
-		ar[1]=" to ";
-		ar[2]=" world";
-		for(String i :ar){
-			System.out.println(i);
+		for(int i=0;i<10;i++){
+			System.out.println("end_______"+i);
 		}
-		System.out.println(2.0-1.1);
+		System.exit(0);
 	}
 }
