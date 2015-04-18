@@ -76,10 +76,14 @@ function vpInit(){
         });
         win.show();
         var nbsp="";
-        for(var i=0;i<300;i++){
-        	nbsp+="&nbsp;";
+        var userAgent=navigator.userAgent;  //浏览器兼容性
+        var n=300;
+        if(userAgent.indexOf("Chrome")!=-1){
+			n=220;
         }
-        
+         for(var i=0;i<n;i++){
+        		nbsp+="&nbsp;";
+        }
 	Ext.Ajax.request({
 		url:'logic.jsp',
 		method:'post',
