@@ -8,7 +8,7 @@ Ext.onReady(function(){
 });
 
 function gridInit(){
-	var filter="AND SHZT='20'";
+	var filter=" AND SHZT='30'";
 	var _tbar2 = new Ext.Toolbar(_tbar2Init());
     var store = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy({
@@ -313,6 +313,7 @@ function batchAudit(type){
                 		items : [{
                 					xtype : 'textarea',
 									hideLabel : false,
+									id:'SHYJ',
 									fieldLabel:'审核意见',
 									name : 'msg',
 									height:90
@@ -360,19 +361,67 @@ function batchAudit(type){
         }
         win.show();
         var a="";
+        var ar=['I_CGYXX','SJH'];
         if(type=="TG"){
         	a="通过";
+        	for(var i=0;i<ar.length;i++){
+				 win.findById(ar[i]).setDisabled(false);      	
+        	}
         }else if(type=="BTG"){
         	a="不通过";
+        	for(var i=0;i<ar.length;i++){
+				 win.findById(ar[i]).setDisabled(true);      	
+        	}
         }
         Ext.getCmp("title").setTitle("审核意见---"+a);
+        win.findById("SHYJ").setValue("审核"+a+"。");
+        initJBRData(records[0].get("WID"));
+        
 	}
 }
 
+function initJBRData(wid){
+	/*  始终无法使用Ext.data.Store的方法达成取得数据的问题
+	var ds_jbr=new Ext.data.Store({
+		proxy:new Ext.data.HttpProxy({
+			url:'logic.jsp?type=JBR&wid='+wid
+		}),
+		reader:new Ext.data.JsonReader({
+			root:'_JBR',
+			totalProperty:'totalCount',
+			id:''
+		},[
+			{name:'__JBR',mapping:'JBR'},
+			{name:'__JBRBH',mapping:'JBRBH'},
+			{name:'__JBRDH',mapping:'JBRDH'}
+		])
+	});
+	ds_jbr.load();
+	alert(ds_jbr.data.items)
+	*/
+	Ext.Ajax.request({
+		url:'logic.jsp?type=JBR&wid='+wid,
+		method:'post',
+		success:function(response){
+			if(response.responseText){
+			var json=eval("("+response.responseText+")");
+				win.findById("SJH").setValue(json._JBR[0].JBRDH);
+				win.findById("I_CGYXX").setValue(json._JBR[0].JBRBH);
+				win.findById("I_CGYXX").setRawValue(json._JBR[0].JBR);
+			}
+		},
+		failure:function(){
+		}
+	})	
+}
 function submit(){
-	var ar=['I_CGFS'];
-	var arr=['采购方式'];
+	//pass or reject
+	var passOrReject=Ext.getCmp("title").title.indexOf("不通过")==-1?"pass":"reject";
+	var ar=['SHYJ','I_CGYXX','SJH'];
+	var arr=['审核意见','经办人','手机号'];
 	var params={"type":"submit"};
+	params["JBR"]=Ext.getCmp("I_CGYXX").getRawValue();
+	params["passOrReject"]=passOrReject;	
 	params["wid"]=Ext.getCmp("grid").getSelectionModel().getSelections()[0].get("WID");
 	for(var i=0;i<ar.length;i++){
 		if(Ext.getCmp(ar[i]).getValue()==''){

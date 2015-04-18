@@ -62,3 +62,14 @@ create table T_SYS_U2UG
 --创建用户组表
 T_SYS_UGROUP_SW
 
+--20150418 16:09
+create table T_GGGL_SPJLB
+(
+  wid    VARCHAR2(40) not null,
+  shr    VARCHAR2(40), 
+  shsj   VARCHAR2(40),
+  shyj   VARCHAR2(300),
+  zb_wid VARCHAR2(40),
+  spjg   VARCHAR2(100),
+  spjs   VARCHAR2(40)
+)
