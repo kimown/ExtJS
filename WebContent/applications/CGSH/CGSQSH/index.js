@@ -521,11 +521,49 @@ function query(){
  * @param {} store
  */
 function rendererOPERATION(value, cellmeta, record, rowIndex, columnIndex, store){
-	var href='&nbsp;&nbsp;<a href="javascript:void(0);" onclick="view()" ><img src="/ExtJS/ext-2.0.2/resources/icons/zoom_in.png" /></a>';
+	var href='&nbsp;&nbsp;<a style="cursor:hand" onclick="look()" ><img src="/ExtJS/ext-2.0.2/resources/icons/zoom_in.png" /></a>';
 	
 	return href;
 }
 function overrides(){
+	
+}
+
+var $win;
+var $panel;
+function look(){
+	if(!$win){
+		if(!$panel){
+			$panel=new Ext.Panel({
+				id:'id_$panel',
+				autoScroll:true,
+				height:280,
+				border:false,
+				autoLoad:{
+					scripts:true,
+					url:'do.html'
+				}
+			})
+		}
+		$win=new Ext.Window({
+			id:'id_$win',
+			layout:'form',
+			iconCls:'',
+			modal:true,
+			closeAction:'hide', 
+			autoHeight:true,
+			x:280,
+			y:50,
+			shadow:false,
+			width:550,
+			maximizable:true,
+			title:'',
+			buttonAlign:'center',
+			items:[$panel]
+		})
+	}
+	$win.show();
+	
 	
 }
 /**

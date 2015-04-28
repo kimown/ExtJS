@@ -32,6 +32,23 @@
 .table_tr01{float:left;height:18px;width:780px;border-bottom:1px solid #dedede;background-color:#ffffff;border-right:none}
 .table_tr_td{float:left;height:18px;line-height:18px;width:130px;border-right:1px solid #dedede;text-align:right;padding-right:5px;}
 .table_center{text-align:center;}
+.table-info {
+	margin:5px 5px 5px 5px;
+	font-size:12px;
+	color:#03386C;
+	background-color:#99BBE8;
+}
+.table-info th {
+	font-weight:bold;
+	text-align:center;
+	background-color:#D0E0F4;
+	padding:2px 2px 2px 2px;
+}
+.table-info td {
+	background-color:white;
+	height:24px;
+	padding:2px 2px 2px 2px;
+}
 </style>
 </head>
 <body>
