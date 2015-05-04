@@ -541,7 +541,7 @@ function look(){
 				border:false,
 				autoLoad:{
 					scripts:true,
-					url:'do.html'
+					url:'logic.jsp?type=html'
 				}
 			})
 		}

@@ -133,4 +133,10 @@
 		json=json.substring(0,json.length()-1)+"]}";
 		response.getWriter().print(json);
 	}
+	
+	if(type.equals("html")){
+		String s="123";
+		response.getWriter().println(s);
+		
+	}
 %>
