@@ -56,7 +56,7 @@ function gridInit(){
 		]),
 		remoteSort:true
 	});	
-	store.setDefaultSort("SGBH","DESC")
+	store.setDefaultSort("SGBH","DESC");
     var grid = new Ext.grid.GridPanel({
     	id:'grid',
         store: store,
@@ -68,7 +68,7 @@ function gridInit(){
         	new Ext.grid.CheckboxSelectionModel(),
             {id:'OPERATION',header: "操作", width: 40, sortable: true, dataIndex: 'OPERATION',renderer:rendererOPERATION},
             {id:'WID',header: "WID", width: 75, sortable: true, dataIndex: 'WID',hidden: true},
-            {id:'SGBH',header: "申购编号", width: 10, sortable: true, dataIndex: 'SGBH'},
+            {id:'SGBH',header: "申购编号", width: 75, sortable: true, dataIndex: 'SGBH'},
             {id:'K_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'K_CGFS',hidden: true},
             {id:'V_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'V_CGFS'},
             {id:'SGR',header: "申购人", width: 75, sortable: true, dataIndex: 'SGR'},
