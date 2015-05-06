@@ -15,4 +15,9 @@ public class ModelImpl implements IModel{
 		// TODO Auto-generated method stub
 		return dao.getTables();
 	}
+	@Override
+	public String paging(String sql) {
+		// TODO Auto-generated method stub
+		return dao.paging(sql);
+	}
 }

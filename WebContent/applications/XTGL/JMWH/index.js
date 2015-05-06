@@ -30,7 +30,7 @@ cn.com.JSCLASS=function(){
 					remoteSort:true
 				})
 				store.setDefaultSort("ENAME","DESC")
-				store.load({params:{start:0,limit:2,filter:"1=1"}});
+				store.load({params:{start:0,limit:2,filter:" 1=1 "}});
    		    	var grid = new Ext.grid.GridPanel({
         			store: store,
         			region:'center',
@@ -44,7 +44,7 @@ cn.com.JSCLASS=function(){
         			width:600,
         			title:'',
         			bbar:new Ext.PagingToolbar({
-        				pageSize:15,
+        				pageSize:2,
         				store:store,
         				displayInfo:true,
         				displayMsg:'显示第   {0} 条到   {1} 条记录,共     {2}	条',

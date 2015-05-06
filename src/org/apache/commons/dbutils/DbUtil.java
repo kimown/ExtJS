@@ -162,7 +162,7 @@ public class DbUtil {
 	
 	public static String getSQLAllJSON(String sql){
 		StringBuffer sb=new StringBuffer();
-		String totalCount=sqlGetOne("SELECT SUM(1) "+sql.substring(sql.toUpperCase().indexOf("FROM")));
+		String totalCount=sqlGetOne("SELECT SUM(1) "+sql.substring(sql.toUpperCase().indexOf("FROM"),sql.lastIndexOf("WHERE")));
 		sb.append("{\"totalCount\":").append(totalCount).append(",\"records\":");
 		sb.append(getList(sql)).append("}");
 		return sb.toString();

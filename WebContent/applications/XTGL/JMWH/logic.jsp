@@ -37,8 +37,13 @@
 		//过滤条件
 		String filter=request.getParameter("filter");
 		
+		StringBuffer sb=new StringBuffer();
+		sb.append("SELECT *");
+		sb.append("  FROM (SELECT ROWNUM AS N, E.*");
+		sb.append("          FROM (SELECT ENAME,CNAME FROM MOD_BIZOBJ ").append(" WHERE").append(filter).append(orderby).append(") E)");
+		sb.append(" WHERE N >").append(sInt).append(" AND N<=").append((sInt+lInt));
 		IModel m=new ModelImpl();
-		response.getWriter().print(m.getTables());
+		response.getWriter().print(m.paging(sb.toString()));
 	}
 
 %>
