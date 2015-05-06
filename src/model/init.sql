@@ -80,3 +80,14 @@ CREATE TABLE mod_bizobj(
 ename VARCHAR2(100) NOT NULL,
 cname VARCHAR2(100)
 )
+
+--创建建模信息表
+create table MOD_BIZOBJPRPTY
+(
+  id        VARCHAR2(100) not null,
+  header    VARCHAR2(100),
+  dataindex VARCHAR2(100),
+  width     VARCHAR2(100) default '75',
+  hidden    VARCHAR2(100) default 'false',
+  ename     VARCHAR2(100)
+)

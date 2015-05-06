@@ -66,9 +66,9 @@ function gridInit(){
         		width:20
         	}),
         	new Ext.grid.CheckboxSelectionModel(),
-            {id:'OPERATION',header: "操作", width: 40, sortable: true, dataIndex: 'OPERATION',renderer:rendererOPERATION},
+            {id:'OPERATION',header: "1操作", width: 40, sortable: true, dataIndex: 'OPERATION',renderer:rendererOPERATION},
             {id:'WID',header: "WID", width: 75, sortable: true, dataIndex: 'WID',hidden: true},
-            {id:'SGBH',header: "申购编号", width: 10, sortable: true, dataIndex: 'SGBH'},
+            {id:'SGBH',header: "申购编号", width: 100, sortable: true, dataIndex: 'SGBH'},
             {id:'K_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'K_CGFS',hidden: true},
             {id:'V_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'V_CGFS'},
             {id:'SGR',header: "申购人", width: 75, sortable: true, dataIndex: 'SGR'},
@@ -103,7 +103,7 @@ function gridInit(){
             {id:'SHZT',header: "审核状态", width: 75, sortable: true, dataIndex: 'SHZT'}
         ],
         stripeRows: true,
-        autoExpandColumn: 'SGBH',
+        //autoExpandColumn: 'SGBH',
         height:height,
         width:width,
         title:'',

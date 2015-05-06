@@ -65,7 +65,7 @@ public class DbUtil {
 		}finally{
 			DbUtils.closeQuietly(conn);
 		}
-		return 	rs[0].toString();
+		return 	rs[0]==null?null:rs[0].toString();
 	}
 	/**
 	 * 查询（返回Array结果）

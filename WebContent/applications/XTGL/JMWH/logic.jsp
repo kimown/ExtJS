@@ -35,15 +35,25 @@
 		}	
 		
 		//过滤条件
-		String filter=request.getParameter("filter");
+		String filter=" AND "+(request.getParameter("filter")==null?" 2=2 ":request.getParameter("filter"));
 		
 		StringBuffer sb=new StringBuffer();
 		sb.append("SELECT *");
 		sb.append("  FROM (SELECT ROWNUM AS N, E.*");
-		sb.append("          FROM (SELECT ENAME,CNAME FROM MOD_BIZOBJ ").append(" WHERE").append(filter).append(orderby).append(") E)");
+		sb.append("          FROM (SELECT ENAME,CNAME FROM MOD_BIZOBJ ").append(" WHERE 1=1 ").append(filter).append(orderby).append(") E)");
 		sb.append(" WHERE N >").append(sInt).append(" AND N<=").append((sInt+lInt));
 		IModel m=new ModelImpl();
 		response.getWriter().print(m.paging(sb.toString()));
 	}
 
+	
+	if(type.equals("getTablePrpts")){
+		//过滤条件
+		String filter=" AND "+(request.getParameter("filter")==null?" 2=2 ":request.getParameter("filter"));
+
+		StringBuffer sb=new StringBuffer();
+		sb.append("SELECT ID,HEADER,DATAINDEX,WIDTH,HIDDEN FROM MOD_BIZOBJPRPTY WHERE 1=1 ").append(filter);
+		IModel m=new ModelImpl();
+		response.getWriter().print(m.paging(sb.toString()));
+	}
 %>
