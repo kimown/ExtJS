@@ -66,7 +66,7 @@ function gridInit(){
         		width:20
         	}),
         	new Ext.grid.CheckboxSelectionModel(),
-            {id:'OPERATION',header: "1操作", width: 40, sortable: true, dataIndex: 'OPERATION',renderer:rendererOPERATION},
+            {id:'OPERATION',header: "操作", width: 40, sortable: true, dataIndex: 'OPERATION',renderer:rendererOPERATION},
             {id:'WID',header: "WID", width: 75, sortable: true, dataIndex: 'WID',hidden: true},
             {id:'SGBH',header: "申购编号", width: 100, sortable: true, dataIndex: 'SGBH'},
             {id:'K_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'K_CGFS',hidden: true},

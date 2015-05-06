@@ -79,10 +79,10 @@ JSCLASS=function(){
         			store: store,
        			    region:'east',
         			columns: [
-            			{header: "id", width: 75, sortable: true, dataIndex: 'ID'},
-            			{header: "header", width: 75, sortable: true, dataIndex: 'HEADER'},
+            			{header: "id", width: 75, sortable: true, dataIndex: 'ID',hidden:true},
+            			{header: "header", width: 150, sortable: true, dataIndex: 'HEADER'},
             			{header: "width", width: 75, sortable: true, dataIndex: 'WIDTH'},
-            			{header: "dataIndex", width: 75, sortable: true, dataIndex: 'DATAINDEX'},
+            			{header: "dataIndex", width: 100, sortable: true, dataIndex: 'DATAINDEX'},
             			{header: "hidden", width: 85, sortable: true, dataIndex: 'HIDDEN'}
         			],
         			stripeRows: true,
