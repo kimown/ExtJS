@@ -28,6 +28,10 @@
 },{
 	text:'系统管理',
 	children:[{
+		text:'建模维护',
+		id:'BizModel',
+		leaf:true
+	},{
 		text:'字典维护',
 		id:'dict',
 		leaf:true

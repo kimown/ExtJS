@@ -73,3 +73,10 @@ create table T_GGGL_SPJLB
   spjg   VARCHAR2(100),
   spjs   VARCHAR2(40)
 )
+
+
+--创建建模表
+CREATE TABLE mod_bizobj(
+ename VARCHAR2(100) NOT NULL,
+cname VARCHAR2(100)
+)

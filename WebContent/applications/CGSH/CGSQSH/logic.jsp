@@ -1,13 +1,15 @@
-
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.PreparedStatement"%><%@page import="com.imooc.db.Md5" %>
 <%@page import="org.json.JSONObject"%>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.imooc.db.DBUtil" %>
 <%@page import="java.util.Date" %>
 <%@page import="java.text.SimpleDateFormat" %>
+<%@page import="BizModel.services.IModel" %>
+<%@page import="BizModel.services.*" %>
+<%@page import="BizModel.services.impl.ModelImpl" %>				
 <%
     request.setCharacterEncoding("utf-8");
 	String type="";
@@ -135,8 +137,8 @@
 	}
 	
 	if(type.equals("html")){
-		String s="123";
-		response.getWriter().println(s);
-		
+		IModel model=new ModelImpl();  
+		response.getWriter().print(model.helloWorld());
 	}
+	
 %>

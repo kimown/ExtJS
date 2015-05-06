@@ -114,7 +114,7 @@ function exit(){
 			if(result.iresult==true){
 				window.location.href="/ExtJS/index.jsp";
 			}else{
-				alert(0)
+				alert(0);
 			}
 		}
 		})
@@ -128,21 +128,33 @@ function openTab(node){
 		return;
 	}
 	var iconCls="";
-	if(node.id=='submit'){
-		iconCls="Applicationformadd";
-	}else if(node.id=='all_purchases'){
-		iconCls="Applicationviewcolumns";
-	}else if(node.id=='secretary_audit'){
-		iconCls="Commentedit";
-	}else if(node.id=='Demo'){
-		iconCls="Cog";
-	}else if(node.id=='dict'){
-		iconCls="Cogedit";
-	}else if(node.id=='decide_method'){
-		iconCls="Pageedit";
-	}else if(node.id=='audit'){
-		iconCls="Pagelightning";
+	switch(node.id){
+		case 'submit':
+			iconCls="Applicationformadd";
+			break;
+		case 'all_purchases':
+			iconCls="Applicationviewcolumns";
+			break;
+		case 'secretary_audit':
+			iconCls="Commentedit";
+			break;
+		case 'Demo':
+			iconCls="Cog";
+			break;
+		case 'dict':
+			iconCls="Cogedit";
+			break;
+		case 'decide_method':
+			iconCls="Pageedit";
+			break;
+		case 'audit':
+			iconCls="Pagelightning";
+			break;
+		case 'BizModel':
+			iconCls="Controller";
+			break;
 	}
+
 	var html='<iframe id="'+node.id+'_iframe" frameborder="0" width=100% height=100%></iframe>';
             tab = new Ext.Panel({
                 id: node.id,
@@ -188,6 +200,10 @@ function tabActivate(p){
 	}else if(p.id=="audit"){
 		if(Ext.getDom("audit_iframe").src==""){
 			Ext.getDom("audit_iframe").src="/ExtJS/applications/CGSH/CGSQSH/index.jsp";	
+		}
+	}else if(p.id=="BizModel"){
+		if(Ext.getDom("BizModel_iframe").src==""){
+			Ext.getDom("BizModel_iframe").src="/ExtJS/applications/XTGL/JMWH/index.jsp";	
 		}
 	}
 }
