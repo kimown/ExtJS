@@ -33,14 +33,15 @@ JSCLASS=function(){
 				})
 				store.setDefaultSort("ENAME","DESC");
 				store.load({params:{start:0,limit:10,filter:" 1=1 "}});
-   		    	var grid = new Ext.grid.GridPanel({
+   		    	var grid = new Ext.grid.EditorGridPanel({
         			store: store,
         			region:'center',
         			id:'center',
         			loadMask: true,
+        			clicksToEdit:1,
         			columns: [
             			{header: "ENAME", width: 150, sortable: true, dataIndex: 'ENAME'},
-           		    	{header: "CNAME", width: 150, sortable: true, dataIndex: 'CNAME'}
+           		    	{header: "CNAME", width: 150, sortable: true, dataIndex: 'CNAME',editor:new Ext.form.TextField({allowBlank:false})}
         			],
         			stripeRows: true,
         			height:350,
@@ -95,6 +96,22 @@ JSCLASS=function(){
 			tbarInit:function(){
 				var ar=[];
 				var k=0;
+				ar[k++]={
+					text:'新增',
+					iconCls:'Add',
+					handler:function(){
+						JSCLASS.add();
+					}
+				}
+				ar[k++]='-';
+				ar[k++]={
+					text:'保存',
+					iconCls:'Accept',
+					handler:function(){
+						JSCLASS.save();
+					}
+				}				
+				ar[k++]='-';
 				ar[k++]=" ENAME/CNAME:";
 				ar[k++]={
 					xtype:'textfield',
@@ -109,12 +126,30 @@ JSCLASS=function(){
 						JSCLASS.query();
 					}
 				};
+				ar[k++]='-';
+				ar[k++]= {
+					text : '重置',
+					iconCls : 'Arrowundo',
+					handler : function() {
+						var ar=["query_ecname"];
+						for(var i=0;i<ar.length;i++){
+							if(Ext.getCmp(ar[i])){
+								Ext.getCmp(ar[i]).reset();
+							}
+						}
+					}
+				};
 				return ar;
 			},
 			listenerInit:function(){
-				this.grid.addListener("rowclick",function(){
-					var record=this.getSelectionModel().getSelections();
-					var ename=record[0].get("ENAME");
+				//这里不使用rowclick事件。
+				this.grid.addListener("cellclick",function(grid,rowIndex,columnIndex,e){
+					//var record=this.getSelectionModel().getSelections();
+					if(columnIndex!=0){
+						return;
+					}
+					var record=this.getStore().getAt(rowIndex);
+					var ename=record.get("ENAME");
 					var filter=" ENAME='"+ename+"'";
 					JSCLASS.grid2.getStore().reload({params:{filter:filter}});
 				})
@@ -123,8 +158,123 @@ JSCLASS=function(){
 				var ecname=Ext.getCmp("query_ecname").getValue();
 				var filter=" (ENAME LIKE '%"+ecname+"%' OR CNAME LIKE '%"+ecname+"%')";
 				Ext.getCmp("center").getStore().reload({params:{start:0,limit:10,filter:filter}});
+			},
+			add:function(){
+				if (!JSCLASS.win) {
+				JSCLASS.win = new Ext.Window({
+					title : '新增',
+					width : 300,
+					height : 140,
+					closeAction : 'hide',
+					layout : 'fit',
+					items : [{
+								xtype : 'panel',
+								plain : true,
+								items : [new Ext.FormPanel({
+											url:'logic.jsp',
+											id:'FormPanel',
+											labelWidth : 75,
+											frame : true,
+											title : '',
+											defaultType : 'textfield',
+											items : [{
+												fieldLabel:'英文名',
+												anchor:'100%',
+												id:'ENAME',
+												name:'ENAME',
+												allowBlank:false
+											},{
+												fieldLabel:'中文名',
+												anchor:'100%',
+												id:'CNAME',
+												name:'CNAME',
+												allowBlank:false
+											}]
+										})]
+							}],
+					modal : true,
+					autoScroll : false,
+					buttonAlign : 'center',
+					closable : true,
+					buttons : [{
+								text : '保存',
+								iconCls : 'Accept',
+								handler : function() {
+									if(Ext.getCmp('FormPanel').getForm().isValid()){
+										Ext.getCmp('FormPanel').getForm().submit({
+											mthod:'POST',
+											params:{
+												type:'saveTable'
+											},
+											waitMsg:'保存中,请等待...',
+											success:function(form,action){
+												var obj=Ext.decode(action.response.responseText);
+												if(obj.success){
+													Ext.Msg.alert("提示","&nbsp;&nbsp;&nbsp;&nbsp;"+obj.msg+"&nbsp;&nbsp;&nbsp;&nbsp;",function(){
+														JSCLASS.win.hide();
+														Ext.getCmp("center").getStore().reload();
+													});
+												}
+											}
+										});
+									} else {
+									var fields = ['ENAME', 'CNAME'];
+									for (var i = 0; i < fields.length; i++) {
+										if (Ext.getCmp(fields[i]).isValid() == false) {
+											var msg = '<div style="width:260">'
+												+ "["
+												+ Ext.getCmp(fields[i]).fieldLabel
+												+ "]是必填项，请输入" + '</div>';
+											Ext.MessageBox.show({
+													title : '提示',
+													msg : msg,
+													buttons : Ext.MessageBox.OK,
+													icon : Ext.MessageBox.ERROR,
+													fn : function() {
+														Ext.getCmp(fields[i])
+																.focus();
+													}
+												})
+											return;
+									}
+								}
 
+							}
+								}
+							},{
+								text : '关闭',
+								iconCls : 'Cancel',
+								handler : function() {
+									JSCLASS.win.hide();
+								}
+							}]
+				})
 			}
+			JSCLASS.win.show();
+			},
+			save:function(){
+				var datas=this.grid.store.getModifiedRecords();
+				var params={};
+				params['type']='saveEditGrid';
+				Ext.each(datas,function(i){
+					params[i.data.ENAME]=i.data.CNAME;
+				});
+				Ext.Ajax.request({
+					url:'logic.jsp',
+					method:'post',
+					params:params,
+					success:function(response){
+						
+					}
+			})
 		}
+	}
 }();
 Ext.EventManager.onDocumentReady(JSCLASS.init,JSCLASS,true);
+
+
+//这里借鉴cellclick事件
+/*
+http://qinya.iteye.com/blog/747209
+
+*/

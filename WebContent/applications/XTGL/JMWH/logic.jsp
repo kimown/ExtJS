@@ -1,7 +1,10 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.SQLException,
 				java.text.SimpleDateFormat,
-				java.util.Date"%>
+				java.util.Date,
+				java.util.Enumeration,
+				java.util.List,
+				java.util.ArrayList" %>
 <%@page import="BizModel.services.IModel,
 				BizModel.services.impl.ModelImpl" %>
 <%
@@ -50,10 +53,43 @@
 	if(type.equals("getTablePrpts")){
 		//过滤条件
 		String filter=" AND "+(request.getParameter("filter")==null?" 2=2 ":request.getParameter("filter"));
-
 		StringBuffer sb=new StringBuffer();
 		sb.append("SELECT ID,HEADER,DATAINDEX,WIDTH,HIDDEN FROM MOD_BIZOBJPRPTY WHERE 1=1 ").append(filter);
 		IModel m=new ModelImpl();
 		response.getWriter().print(m.paging(sb.toString()));
 	}
+	
+	if(type.equals("saveTable")){
+		StringBuffer sb=new StringBuffer();
+		sb.append("INSERT INTO MOD_BIZOBJ( ");
+		StringBuffer cm=new StringBuffer();
+		StringBuffer vl=new StringBuffer();
+		Enumeration<String> names=request.getParameterNames();
+		while(names.hasMoreElements()){
+				String name=names.nextElement();
+				if(!name.equals("type")){
+					cm.append(name+",");
+					String value=request.getParameter(name);
+					vl.append("'"+value+"',");	
+				}
+		}
+		sb.append(cm.toString().substring(0,cm.length()-1)).append(") VALUES(").append(vl.toString().substring(0,vl.toString().length()-1)).append(")");
+		IModel m=new ModelImpl();
+		response.getWriter().print(m.update(sb.toString()));
+	}
+	if(type.equals("saveEditGrid")){
+		List<String> list=new ArrayList();
+		Enumeration<String> names=request.getParameterNames();
+		while(names.hasMoreElements()){
+				StringBuffer sb=null;
+				String name=names.nextElement();
+				if(!name.equals("type")){
+					sb.append("UPDATE MOD_BIZOBJ SET CNAME='").append(request.getParameter(name)).append("' WHERE ENAME='").append(name).append("'");
+				}
+				list.add(sb);
+		}
+		int size=list.size();
+		String[] ar=(String[])list.toArray(new String[size]);
+	}
+	
 %>

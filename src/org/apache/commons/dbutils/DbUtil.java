@@ -6,7 +6,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.dbutils.handlers.ArrayHandler;
@@ -30,6 +33,12 @@ public class DbUtil {
 			e.printStackTrace();
 		}
 		return conn;
+	}
+	
+	public static void timing(String sql){
+		Date d=new Date();
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println(sdf.format(d)+" : "+sql);
 	}
 	/**
 	 * 执行统计判断语句，语句的执行结果必须只返回一个布尔值
@@ -63,6 +72,7 @@ public class DbUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
+			timing(sql);
 			DbUtils.closeQuietly(conn);
 		}
 		return 	rs[0]==null?null:rs[0].toString();
@@ -123,11 +133,32 @@ public class DbUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
+			timing(sql);
 			DbUtils.closeQuietly(conn);
 		}
 		return n;
 	}
-	
+	/**
+	 * 批量更新
+	 * @param sql
+	 * @return
+	 */
+	public static String[] batchSqlArray(String[] sql){
+		Connection conn=getConn();
+		List<String> list=new ArrayList();
+		try {
+			System.out.println("---批量执行开始-----");
+			for(String i : sql){
+				list.add(update(i)+"");
+			}
+			System.out.println("===批量执行结束=====");
+		}finally{
+			DbUtils.closeQuietly(conn);	
+		}
+		int size=list.size();
+		String[] ar=(String[])list.toArray(new String[size]);
+		return ar;
+	}
 	public static JSONArray getList(String sql){
 		final JSONArray jsonAr=new JSONArray();
 		Connection conn=getConn();
@@ -169,13 +200,10 @@ public class DbUtil {
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		/*
-		 * 
+
 		DbUtil du=new DbUtil();
-		String sql="select * from T_CGZXT_CGSQB t ";
-		System.out.println(du.getSQLAllJSON(sql));
-		
-		*/
+		String[] ar={"INSERT INTO T_DEMO(wid) VALUES('11')","INSERT INTO T_DEMO(wid) VALUES('11')"};
+		du.batchSqlArray(ar);
 	}
 
 }

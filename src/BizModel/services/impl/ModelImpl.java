@@ -1,5 +1,7 @@
 package BizModel.services.impl;
 
+import org.json.JSONObject;
+
 import BizModel.dao.ModelDao;
 import BizModel.services.IModel;
 
@@ -19,5 +21,10 @@ public class ModelImpl implements IModel{
 	public String paging(String sql) {
 		// TODO Auto-generated method stub
 		return dao.paging(sql);
+	}
+	@Override
+	public JSONObject update(String sql) {
+		// TODO Auto-generated method stub
+		return dao.update(sql);
 	}
 }

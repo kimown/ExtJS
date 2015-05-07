@@ -1,5 +1,6 @@
 package BizModel.dao;
 import org.apache.commons.dbutils.DbUtil;
+import org.json.JSONObject;
 public class ModelDao {
 	private DbUtil db=new DbUtil();
 	public String helloWorld(){
@@ -28,4 +29,17 @@ public class ModelDao {
 		return _sb.toString();
 	}
 
+	public JSONObject update(String sql){
+		JSONObject obj=new JSONObject();
+		int rows= DbUtil.update(sql);
+		if(rows>0){
+			obj.put("success", true);
+			obj.put("msg", "保存成功");
+		}else{
+			obj.put("success", false);
+			obj.put("msg", "保存失败");	
+		}
+		return obj;
+		
+	}
 }

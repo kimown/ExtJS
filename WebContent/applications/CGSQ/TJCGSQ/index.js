@@ -150,7 +150,7 @@ function formdataInit(){
 	var ar=['SGSJ','ZGZJ','I_SGXQ','SGR','I_SGBM'];
 	for(var i=0;i<ar.length;i++){
 		//simple.findById(ar[i]).setDisabled(true);
-		//使用样式来进行补课编辑http://www.360doc.com/content/13/0127/19/432969_262718856.shtml
+		//使用样式来进行不可编辑http://www.360doc.com/content/13/0127/19/432969_262718856.shtml
 		simple.findById(ar[i]).addClass("x-item-disabled");
 		//simple.findById(ar[i]).getEl().dom.readOnly = true; 
 		//Ext.getCmp(ar[i]).getEl().dom.readOnly = true; 
