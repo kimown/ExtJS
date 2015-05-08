@@ -27,4 +27,9 @@ public class ModelImpl implements IModel{
 		// TODO Auto-generated method stub
 		return dao.update(sql);
 	}
+	@Override
+	public JSONObject update(String[] sqls) {
+		// TODO Auto-generated method stub
+		return dao.update(sqls);
+	}
 }

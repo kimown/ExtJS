@@ -4,7 +4,8 @@
 				java.util.Date,
 				java.util.Enumeration,
 				java.util.List,
-				java.util.ArrayList" %>
+				java.util.ArrayList,
+				java.util.Arrays" %>
 <%@page import="BizModel.services.IModel,
 				BizModel.services.impl.ModelImpl" %>
 <%
@@ -81,15 +82,16 @@
 		List<String> list=new ArrayList();
 		Enumeration<String> names=request.getParameterNames();
 		while(names.hasMoreElements()){
-				StringBuffer sb=null;
-				String name=names.nextElement();
-				if(!name.equals("type")){
-					sb.append("UPDATE MOD_BIZOBJ SET CNAME='").append(request.getParameter(name)).append("' WHERE ENAME='").append(name).append("'");
-				}
-				list.add(sb);
+			StringBuffer sb=new StringBuffer();
+			String name=names.nextElement();
+			if(!name.equals("type")){
+				sb.append("UPDATE MOD_BIZOBJ SET CNAME='").append(request.getParameter(name)).append("' WHERE ENAME='").append(name).append("'");
+				list.add(sb.toString());
+			}
 		}
 		int size=list.size();
 		String[] ar=(String[])list.toArray(new String[size]);
+		IModel m=new ModelImpl();
+		response.getWriter().print(m.update(ar));
 	}
-	
 %>

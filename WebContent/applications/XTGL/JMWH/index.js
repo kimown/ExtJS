@@ -76,20 +76,42 @@ JSCLASS=function(){
 					remoteSort:true
 				})
 				store.load({params:{filter:" 1=2 "}});
-				var grid = new Ext.grid.GridPanel({
+
+				var ar = new Ext.form.ComboBox({
+						store : new Ext.data.SimpleStore({
+									fields : ['name', 'value'],
+									data : [['false', 'false'],
+											['true', 'true']]
+								}),
+						name : 'hidden',
+						hiddenName : 'SFJK',
+						allowBlank : false,
+						valueField : 'name',
+						displayField : 'value',
+						typeAhead : true,
+						mode : 'local',
+						forceSelection : true,
+						triggerAction : 'all',
+						emptyText : '请选择',
+						fieldLabel : '',
+						selectOnFocus : true
+				});				
+				var grid = new Ext.grid.EditorGridPanel({
         			store: store,
        			    region:'east',
         			columns: [
             			{header: "id", width: 75, sortable: true, dataIndex: 'ID',hidden:true},
-            			{header: "header", width: 150, sortable: true, dataIndex: 'HEADER'},
+            			{header: "header", width: 150, sortable: true, dataIndex: 'HEADER',editor:new Ext.form.TextField({allowBlank:false})},
             			{header: "width", width: 75, sortable: true, dataIndex: 'WIDTH'},
             			{header: "dataIndex", width: 100, sortable: true, dataIndex: 'DATAINDEX'},
-            			{header: "hidden", width: 85, sortable: true, dataIndex: 'HIDDEN'}
+            			{header: "hidden", width: 85, sortable: true, dataIndex: 'HIDDEN',editor:ar}
         			],
         			stripeRows: true,
         			height:350,
         			width:600,
-       			    title:'属性表'
+        			clicksToEdit:1,
+       			    title:'属性表',
+       			    tbar:this.tbarInit2()
     				});
     			return grid;
 			},
@@ -139,6 +161,18 @@ JSCLASS=function(){
 						}
 					}
 				};
+				return ar;
+			},
+			tbarInit2:function(){
+				var ar=[];
+				var k=0;
+				ar[k++]={
+					text:'保存',
+					iconCls:'Accept',
+					handler:function(){
+						JSCLASS.save2();
+					}
+				}
 				return ar;
 			},
 			listenerInit:function(){
@@ -264,9 +298,24 @@ JSCLASS=function(){
 					method:'post',
 					params:params,
 					success:function(response){
-						
+						var obj=Ext.decode(response.responseText);
+						if(obj.success){
+							Ext.Msg.alert("提示","&nbsp;&nbsp;&nbsp;&nbsp;"+obj.msg+"&nbsp;&nbsp;&nbsp;&nbsp;",function(){
+							Ext.getCmp("center").getStore().reload();
+							});
+						}
 					}
 			})
+		},
+		save2:function(){
+			var datas=this.grid2.store.getModifiedRecords();
+			var params={
+				type:'saveEditGrid2'
+			};
+			Ext.each(datas,function(i){
+				params[i.data.]
+			})
+			
 		}
 	}
 }();

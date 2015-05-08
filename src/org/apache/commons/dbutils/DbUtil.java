@@ -143,20 +143,23 @@ public class DbUtil {
 	 * @param sql
 	 * @return
 	 */
-	public static String[] batchSqlArray(String[] sql){
+	public static int[] batchSqlArray(String[] sql){
 		Connection conn=getConn();
-		List<String> list=new ArrayList();
+		List<Integer> list=new ArrayList();
 		try {
 			System.out.println("---批量执行开始-----");
 			for(String i : sql){
-				list.add(update(i)+"");
+				list.add(update(i));
+				System.out.println(i);
 			}
 			System.out.println("===批量执行结束=====");
 		}finally{
 			DbUtils.closeQuietly(conn);	
 		}
-		int size=list.size();
-		String[] ar=(String[])list.toArray(new String[size]);
+		int[] ar=new int[list.size()];
+		for(int i=0;i<list.size();i++){
+			ar[i]=list.get(i);
+		}
 		return ar;
 	}
 	public static JSONArray getList(String sql){
@@ -203,7 +206,7 @@ public class DbUtil {
 
 		DbUtil du=new DbUtil();
 		String[] ar={"INSERT INTO T_DEMO(wid) VALUES('11')","INSERT INTO T_DEMO(wid) VALUES('11')"};
-		du.batchSqlArray(ar);
+		//int[] kk=du.batchSqlArray(ar);
 	}
 
 }

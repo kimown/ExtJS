@@ -42,4 +42,23 @@ public class ModelDao {
 		return obj;
 		
 	}
+
+	public JSONObject update(String[] sqls) {
+		// TODO Auto-generated method stub
+		JSONObject obj=new JSONObject();
+		int[] rows=DbUtil.batchSqlArray(sqls);
+		for(int i=0;i<rows.length;i++){
+			if(rows[i]!=1){
+				obj.put("success", false);
+				obj.put("msg", "更新失败");
+				break;
+			}else{
+				obj.put("success", true);
+				obj.put("msg", "更新成功");	
+			}
+		}
+		return obj;
+	}
+	
+	
 }
