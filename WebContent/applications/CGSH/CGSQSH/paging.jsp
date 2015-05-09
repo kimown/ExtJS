@@ -31,15 +31,16 @@
 	}	
 	
 	//过滤条件
-	String filter=request.getParameter("filter");
-	
+	String filter=request.getParameter("filter")==null?"":request.getParameter("filter");
+	String filters=request.getParameter("filters")==null?"":request.getParameter("filters");
+	System.out.println(filter+"----------");
 	
 	//跨域请求使用到，JSON和JSONP的区别而已
 	String callback = request.getParameter("callback");
 	
 
 	StringBuffer totalcountsql=new StringBuffer();
-	totalcountsql.append("SELECT COUNT(1) AS TOTALCOUNT FROM V_CGZXT_CGSQB WHERE 1=1 "+(filter==null?"":filter));
+	totalcountsql.append("SELECT COUNT(1) AS TOTALCOUNT FROM V_CGZXT_CGSQB WHERE 1=1 "+filter+filters);
 	Connection conn=DBUtil.getConnection();
 	System.out.println("执行totalcountsql："+totalcountsql.toString());
 	PreparedStatement pstmt=conn.prepareStatement(totalcountsql.toString());
@@ -53,7 +54,7 @@
 	StringBuffer datasql=new StringBuffer();
 	datasql.append("   SELECT *");
 	datasql.append("     FROM (SELECT ROWNUM AS NUMROW, TEMP.*");
-	datasql.append("             FROM (SELECT * FROM V_CGZXT_CGSQB WHERE 11=11 "+(filter==null?"":filter)+(orderby==""?"":orderby)+") TEMP)");
+	datasql.append("             FROM (SELECT * FROM V_CGZXT_CGSQB WHERE 11=11 "+(filter+filters)+(orderby==""?"":orderby)+") TEMP)");
 	datasql.append("    WHERE NUMROW > "+sInt);
 	datasql.append("      AND NUMROW <= "+(sInt+lInt));
 	System.out.println("执行查出datasql："+datasql.toString());

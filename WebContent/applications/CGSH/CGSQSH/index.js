@@ -68,7 +68,7 @@ function gridInit(){
         	new Ext.grid.CheckboxSelectionModel(),
             {id:'OPERATION',header: "操作", width: 40, sortable: true, dataIndex: 'OPERATION',renderer:rendererOPERATION},
             {id:'WID',header: "WID", width: 75, sortable: true, dataIndex: 'WID',hidden: true},
-            {id:'SGBH',header: "申购编号", width: 75, sortable: true, dataIndex: 'SGBH'},
+            {id:'SGBH',header: "申购编号", width: 90, sortable: true, dataIndex: 'SGBH'},
             {id:'K_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'K_CGFS',hidden: true},
             {id:'V_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'V_CGFS'},
             {id:'SGR',header: "申购人", width: 75, sortable: true, dataIndex: 'SGR'},
@@ -100,10 +100,10 @@ function gridInit(){
             {id:'SGLY',header: "申购理由", width: 75, sortable: true, dataIndex: 'SGLY'}, 
             {id:'YYQSBCLYJ',header: "原仪器设备处理意见", width: 75, sortable: true, dataIndex: 'YYQSBCLYJ'},            
             {id:'BCSM',header: "补充说明", width: 75, sortable: true, dataIndex: 'BCSM'},
-            {id:'SHZT',header: "审核状态", width: 75, sortable: true, dataIndex: 'SHZT'}
+            {id:'SHZT',header: "审核状态", width: 75, sortable: true, dataIndex: 'SHZT',renderer:rendererOPERATION2}
         ],
         stripeRows: true,
-        autoExpandColumn: 'SGBH',
+        //autoExpandColumn: 'SGBH',
         height:height,
         width:width,
         title:'',
@@ -489,7 +489,7 @@ function query(){
 	var sgbh=Ext.fly("query_sgbh").dom.value;
 	var yqsbmc=Ext.fly("query_yqsbmc").dom.value;
 	var sgsj=Ext.fly("query_sgsj").dom.value;
-    var filter=" AND SGRBH='"+userid+"' AND SHZT='20' ";
+    var filter="  AND SHZT='30' ";
 	if(sgbh){
 		filter+=" AND SGBH LIKE '%"+sgbh+"%'";
 	}
@@ -499,7 +499,7 @@ function query(){
 	if(sgsj){
 		filter+=" AND SGSJ='"+sgsj+"'";
 	}
-	Ext.getCmp("grid").getStore().reload({params:{start:0,limit:15,filter:filter}});
+	Ext.getCmp("grid").getStore().reload({params:{start:0,limit:15,filters:filter}});
 }
 /**
  * 
@@ -521,9 +521,19 @@ function query(){
  * @param {} store
  */
 function rendererOPERATION(value, cellmeta, record, rowIndex, columnIndex, store){
-	var href='&nbsp;&nbsp;<a style="cursor:hand" onclick="lookup()" ><img src="/ExtJS/ext-2.0.2/resources/icons/zoom_in.png" /></a>';
+	var href='&nbsp;&nbsp;<a style="cursor:hand" onclick="lookup()" ><img title="查看" src="/ExtJS/ext-2.0.2/resources/icons/magnifier.png" /></a>';
 	
 	return href;
+}
+
+function rendererOPERATION2(value, cellmeta, record, rowIndex, columnIndex, store){
+	var shzt="";
+	switch(value){
+		case '10':shzt='待秘书审核';break;
+		case '20':shzt='待经办人审核';break;
+		case '30':shzt='待采购中心主任审核';break;
+	}
+	return shzt;
 }
 function overrides(){
 	
@@ -572,7 +582,7 @@ function lookup(){
 			   +"</div><div class='table_tr_td'>原仪器设备处理意见:</div><div class='table_tr_td table_center'>"+record.get("YYQSBCLYJ")
 			   +"</div><div class='table_tr_td'>补充说明:</div><div class='table_tr_td table_center'>"+record.get("BCSM")
 			   +"</div></div>"
-			   +"<div class='table_tr01'><div class=' table_tr_td'>审核状态:</div><div class='table_tr_td table_center'>"+record.get("SHZT")
+			   +"<div class='table_tr01'><div class=' table_tr_td'>审核状态:</div><div class='table_tr_td table_center'>"+rendererOPERATION2(record.get("SHZT"))
 	           +"</div><div class='table_tr_td'></div><div class='table_tr_td table_center'>"
 	           +"</div><div class='table_tr_td'></div><div class='table_tr_td table_center'>"						  
 			   +"</div></div>"
@@ -582,15 +592,16 @@ if(!w){
 	w = new Ext.Window({
                 layout      : 'fit',
                 width       : 800,
-                height      : 300,
+                height      : 250,
                 closeAction :'hide',
                 plain       : false,
                 modal:true,
                 bodyStyle:'background-color:#ffffff;',
-                html:html
+                html:""
 	})
 	}
 	w.show();
+	w.body.update(html);
 }
 var $win;
 var $panel;
@@ -660,3 +671,10 @@ function view(){
     }			
 	})
 }
+
+
+//window内html的update
+/*
+https://www.sencha.com/forum/showthread.php?36952-How-to-update-window-HTML
+https://www.sencha.com/forum/showthread.php?65363-Update-HTML-content-of-panel-added-to-a-window
+*/
