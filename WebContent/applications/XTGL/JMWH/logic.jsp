@@ -1,3 +1,4 @@
+<%@page import="org.json.JSONObject"%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.SQLException,
 				java.text.SimpleDateFormat,
@@ -5,7 +6,8 @@
 				java.util.Enumeration,
 				java.util.List,
 				java.util.ArrayList,
-				java.util.Arrays" %>
+				java.util.Arrays,
+				org.json.JSONArray" %>
 <%@page import="BizModel.services.IModel,
 				BizModel.services.impl.ModelImpl" %>
 <%
@@ -93,5 +95,28 @@
 		String[] ar=(String[])list.toArray(new String[size]);
 		IModel m=new ModelImpl();
 		response.getWriter().print(m.update(ar));
+	}
+	
+	if(type.equals("saveEditGrid2")){
+		String records=request.getParameter("records").replace("\"", "'");
+		JSONArray ar=new JSONArray(records);
+		String[] sqls=new String[ar.length()];
+		for(int i=0;i<ar.length();i++){
+			JSONObject obj=ar.getJSONObject(i);
+			String[] k=obj.getNames(obj);
+			StringBuffer sq=new StringBuffer();
+			sq.append("UPDATE MOD_BIZOBJPRPTY SET ");
+			for(int j=0;j<k.length;j++){
+				if(!k[j].equals("DATAINDEX")){
+					sq.append(k[j]).append("='").append(obj.get(k[j])).append("',");
+				}
+			}
+			StringBuffer _sq=new StringBuffer();
+			_sq.append(sq.substring(0,sq.length()-1));
+			_sq.append(" WHERE DATAINDEX='").append(obj.get("DATAINDEX")).append("'");
+			sqls[i]=_sq.toString();
+		}	
+		IModel m=new ModelImpl();
+		response.getWriter().print(m.update(sqls));
 	}
 %>

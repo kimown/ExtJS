@@ -89,9 +89,33 @@ function itemsInit(){
 			panelIn();
 		}
 	})
+	
+	ar[k++]=new Ext.Button({
+		iconCls  :'Flagaf',
+		text:'window加载html',
+		tooltip:'window加载html',
+		handler:function(){
+			winHtml();
+		}
+	})
 	return ar;
 }
 
+var w;
+function winHtml(){
+	if(!w){
+	w = new Ext.Window({
+                layout      : 'fit',
+                width       : 500,
+                height      : 300,
+                closeAction :'hide',
+                plain       : false,
+                bodyStyle:'background-color:#ffffff;',
+                html:'<b>1312</b>'
+	})
+	}
+	w.show();
+}
 var _window;
 function panelIn(){
 	if(!_window){

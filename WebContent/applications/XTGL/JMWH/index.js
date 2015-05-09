@@ -102,7 +102,7 @@ JSCLASS=function(){
         			columns: [
             			{header: "id", width: 75, sortable: true, dataIndex: 'ID',hidden:true},
             			{header: "header", width: 150, sortable: true, dataIndex: 'HEADER',editor:new Ext.form.TextField({allowBlank:false})},
-            			{header: "width", width: 75, sortable: true, dataIndex: 'WIDTH'},
+            			{header: "width", width: 75, sortable: true, dataIndex: 'WIDTH',editor:new Ext.form.TextField({allowBlank:false})},
             			{header: "dataIndex", width: 100, sortable: true, dataIndex: 'DATAINDEX'},
             			{header: "hidden", width: 85, sortable: true, dataIndex: 'HIDDEN',editor:ar}
         			],
@@ -110,7 +110,7 @@ JSCLASS=function(){
         			height:350,
         			width:600,
         			clicksToEdit:1,
-       			    title:'属性表',
+       			    title:'',
        			    tbar:this.tbarInit2()
     				});
     			return grid;
@@ -166,6 +166,8 @@ JSCLASS=function(){
 			tbarInit2:function(){
 				var ar=[];
 				var k=0;
+				ar[k++]='属性表';
+				ar[k++]='-';
 				ar[k++]={
 					text:'保存',
 					iconCls:'Accept',
@@ -309,13 +311,36 @@ JSCLASS=function(){
 		},
 		save2:function(){
 			var datas=this.grid2.store.getModifiedRecords();
+			if(datas.length<1){
+				return;
+			}
 			var params={
 				type:'saveEditGrid2'
 			};
+			var records=[];
 			Ext.each(datas,function(i){
-				params[i.data.]
+				var record={
+					DATAINDEX:i.data.DATAINDEX
+				};
+				for(var t in i.modified){
+					record[t]=i.data[t];
+				}
+				records.push(record);
 			})
-			
+			params['records']=Ext.encode(records);
+			Ext.Ajax.request({
+					url:'logic.jsp',
+					method:'post',
+					params:params,
+					success:function(response){
+						var obj=Ext.decode(response.responseText);
+						if(obj.success){
+							Ext.Msg.alert("提示","&nbsp;&nbsp;&nbsp;&nbsp;"+obj.msg+"&nbsp;&nbsp;&nbsp;&nbsp;",function(){
+							JSCLASS.grid2.getStore().reload();
+							});
+						}
+					}
+			})		
 		}
 	}
 }();
