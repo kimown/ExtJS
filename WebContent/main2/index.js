@@ -38,7 +38,14 @@ function vpInit(){
             margins     : '3 0 3 3',
             cmargins    : '3 3 3 3'
         });
-        
+        var dataUrl='tree-data.json';
+        switch(username){
+        	case '199210935':dataUrl='tree-data_0.json';break;
+        	case '200210610':dataUrl='tree-data_0.json';break;
+        	case '200611485':dataUrl='tree-data_10.json';break;
+        	case '199210324':dataUrl='tree-data_20.json';break;
+        	case '200411037':dataUrl='tree-data_30.json';break;
+        }
         var treePanel = new Ext.tree.TreePanel({
     		id: 'tree-panel',
     		title: '',
@@ -51,9 +58,8 @@ function vpInit(){
         	lines: false,
         	singleExpand: false,
         	useArrows: true,
-        
-       		 loader: new Ext.tree.TreeLoader({
-            	dataUrl:'tree-data.json'
+       		loader: new Ext.tree.TreeLoader({
+            	dataUrl:dataUrl
        		 }),
         	root: new Ext.tree.AsyncTreeNode()
     	});

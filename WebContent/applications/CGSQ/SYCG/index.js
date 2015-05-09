@@ -71,7 +71,7 @@ function gridInit(){
         	new Ext.grid.CheckboxSelectionModel(),
             {id:'OPERATION',header: "操作", width: 40, sortable: true, dataIndex: 'OPERATION',renderer:rendererOPERATION},
             {id:'WID',header: "WID", width: 75, sortable: true, dataIndex: 'WID',hidden: true},
-            {id:'SGBH',header: "申购编号", width: 10, sortable: true, dataIndex: 'SGBH'},
+            {id:'SGBH',header: "申购编号", width: 90, sortable: true, dataIndex: 'SGBH'},
             {id:'K_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'K_CGFS',hidden: true},
             {id:'V_CGFS',header: "采购方式", width: 75, sortable: true, dataIndex: 'V_CGFS'},
             {id:'SGR',header: "申购人", width: 75, sortable: true, dataIndex: 'SGR'},
@@ -103,10 +103,10 @@ function gridInit(){
             {id:'SGLY',header: "申购理由", width: 75, sortable: true, dataIndex: 'SGLY'}, 
             {id:'YYQSBCLYJ',header: "原仪器设备处理意见", width: 75, sortable: true, dataIndex: 'YYQSBCLYJ'},            
             {id:'BCSM',header: "补充说明", width: 75, sortable: true, dataIndex: 'BCSM'},
-            {id:'SHZT',header: "审核状态", width: 75, sortable: true, dataIndex: 'SHZT'}
+            {id:'SHZT',header: "审核状态", width: 75, sortable: true, dataIndex: 'SHZT',renderer:rendererOPERATION2}
         ],
         stripeRows: true,
-        autoExpandColumn: 'SGBH',
+        //autoExpandColumn: 'SGBH',
         height:height,
         width:width,
         title:'',
@@ -186,7 +186,7 @@ function gridInit(){
 			   +"</div><div class='table_tr_td'>原仪器设备处理意见:</div><div class='table_tr_td table_center'>"+record.get("YYQSBCLYJ")
 			   +"</div><div class='table_tr_td'>补充说明:</div><div class='table_tr_td table_center'>"+record.get("BCSM")
 			   +"</div></div>"
-			   +"<div class='table_tr01'><div class=' table_tr_td'>审核状态:</div><div class='table_tr_td table_center'>"+record.get("SHZT")
+			   +"<div class='table_tr01'><div class=' table_tr_td'>审核状态:</div><div class='table_tr_td table_center'>"+rendererOPERATION2(record.get("SHZT"))
 	           +"</div><div class='table_tr_td'></div><div class='table_tr_td table_center'>"
 	           +"</div><div class='table_tr_td'></div><div class='table_tr_td table_center'>"						  
 			   +"</div></div>"
@@ -354,8 +354,86 @@ function query(){
  * @param {} store
  */
 function rendererOPERATION(value, cellmeta, record, rowIndex, columnIndex, store){
-	var href='&nbsp;&nbsp;<a href="javascript:void(0);" onclick="view()" ><img src="/ExtJS/ext-2.0.2/resources/icons/zoom_in.png" /></a>';
+	var href='&nbsp;&nbsp;<a href="javascript:void(0);" onclick="lookup()" ><img src="/ExtJS/ext-2.0.2/resources/icons/magnifier.png" /></a>';
 	return href;
+}
+
+
+var w;
+function lookup(){
+	var records=Ext.getCmp("grid").getSelectionModel().getSelections();
+		var record=records[0];//把这行的record取出来 
+		//var str=Ext.encode(record.data);//组装成一个字符串
+		var html="<div class='table_01'>"
+			   +'<div style="font-size:12;float:center;height:20px;width:782px;border-bottom:1px solid #dedede;background-color:#dfe8f6;border-right:none">'
+			   +'采购详细信息'+'</div>'
+			   +"<div class='table_tr'><div class='table_tr_td'>申购编号:</div><div class='table_tr_td table_center'>"+record.get("SGBH") 
+	           +"</div><div class='table_tr_td'>采购方式:</div><div class='table_tr_td table_center'>"+record.get("V_CGFS")
+	           +"</div><div class='table_tr_td'>申购人:</div><div class='table_tr_td table_center'>"+record.get("SGR")
+			   +"</div></div>"
+			   +"<div class='table_tr01'><div class='table_tr_td'>申购人编号:</div><div class='table_tr_td table_center'>"+record.get("SGRBH")
+			   +"</div><div class='table_tr_td'>申购人电话:</div><div class='table_tr_td table_center'>"+record.get("SGRDH")
+			   +"</div><div class='table_tr_td'>申购部门:</div><div class='table_tr_td table_center'>"+record.get("V_SGBM")
+			   +"</div></div>"
+			   +"<div class='table_tr'><div class='table_tr_td'>申购校区:</div><div class='table_tr_td table_center'>"+record.get("V_SGXQ")
+			   +"</div><div class='table_tr_td'>申购时间:</div><div class='table_tr_td table_center'>"+record.get("SGSJ")
+			   +"</div><div class='table_tr_td'>要求完成时间:</div><div class='table_tr_td table_center'>"+record.get("YQWCSJ")
+			   +"</div></div>"
+			   +"<div class='table_tr01'><div class='table_tr_td'>项目负责人:</div><div class='table_tr_td table_center'>"+record.get("XMFZR")
+			   +"</div><div class='table_tr_td'>负责人电话:</div><div class='table_tr_td table_center'>"+record.get("FZRDH")
+			   +"</div><div class='table_tr_td'>使用校区:</div><div class='table_tr_td table_center'>"+record.get("V_SYXQ")
+			   +"</div></div>"
+			   +"<div class='table_tr'><div class='table_tr_td'> 是否进口:</div><div class='table_tr_td table_center'>"+record.get("V_SFJK")
+			   +"</div><div class='table_tr_td'>是否免税:</div><div class='table_tr_td table_center'>"+record.get("V_SFMS")
+	           +"</div><div class='table_tr_td'>申购数量:</div><div class='table_tr_td table_center'>"+record.get("SGSL")
+			   +"</div></div>"
+			   +"<div class='table_tr01'><div class='table_tr_td'>参考单价:</div><div class='table_tr_td table_center'>"+record.get("CKDJ")
+			   +"</div><div class='table_tr_td'>最高总价:</div><div class='table_tr_td table_center'>"+record.get("ZGZJ")
+	           +"</div><div class='table_tr_td'>仪器设备名称:</div><div class='table_tr_td table_center'>"+record.get("YQSBMC")
+			   +"</div></div>"
+			   +"<div class='table_tr'><div class='table_tr_td'>经费代码:</div><div class='table_tr_td table_center'>"+record.get("JFDM")
+			   +"</div><div class='table_tr_td'>经费名称:</div><div class='table_tr_td table_center'>"+record.get("JFMC")
+			   +"</div><div class='table_tr_td'>经费总金额:</div><div class='table_tr_td table_center'>"+record.get("JFZJE")
+			   +"</div></div>"
+			   +"<div class='table_tr01'><div class='table_tr_td'>是否自购:</div><div class='table_tr_td table_center'>"+record.get("V_SFZG")
+			   +"</div><div class='table_tr_td'>供应商信息:</div><div class='table_tr_td table_center'>"+record.get("GYSXX")
+	           +"</div><div class='table_tr_td'>仪器设备信息:</div><div class='table_tr_td table_center'>"+record.get("YQSBXX")
+			   +"</div></div>"
+			   +"<div class='table_tr'><div class='table_tr_td'>申购理由:</div><div class='table_tr_td table_center'>"+record.get("SGLY")
+			   +"</div><div class='table_tr_td'>原仪器设备处理意见:</div><div class='table_tr_td table_center'>"+record.get("YYQSBCLYJ")
+			   +"</div><div class='table_tr_td'>补充说明:</div><div class='table_tr_td table_center'>"+record.get("BCSM")
+			   +"</div></div>"
+			   +"<div class='table_tr01'><div class=' table_tr_td'>审核状态:</div><div class='table_tr_td table_center'>"+rendererOPERATION2(record.get("SHZT"))
+	           +"</div><div class='table_tr_td'></div><div class='table_tr_td table_center'>"
+	           +"</div><div class='table_tr_td'></div><div class='table_tr_td table_center'>"						  
+			   +"</div></div>"
+			   +"</div>";
+	
+if(!w){
+	w = new Ext.Window({
+                layout      : 'fit',
+                width       : 800,
+                height      : 250,
+                closeAction :'hide',
+                plain       : false,
+                modal:true,
+                bodyStyle:'background-color:#ffffff;',
+                html:""
+	})
+	}
+	w.show();
+	w.body.update(html);
+}
+
+function rendererOPERATION2(value, cellmeta, record, rowIndex, columnIndex, store){
+	var shzt="";
+	switch(value){
+		case '10':shzt='待秘书审核';break;
+		case '20':shzt='待经办人审核';break;
+		case '30':shzt='待采购中心主任审核';break;
+		case '40':shzt='审核通过';break;
+	}
+	return shzt;
 }
 function overrides(){
 	

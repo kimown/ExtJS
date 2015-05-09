@@ -532,6 +532,7 @@ function rendererOPERATION2(value, cellmeta, record, rowIndex, columnIndex, stor
 		case '10':shzt='待秘书审核';break;
 		case '20':shzt='待经办人审核';break;
 		case '30':shzt='待采购中心主任审核';break;
+		case '40':shzt='审核通过';break;
 	}
 	return shzt;
 }
