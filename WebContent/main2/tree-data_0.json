@@ -1,0 +1,13 @@
+[{
+    text:'采购申请',
+    expanded: true,
+    children:[{
+        text:'提交采购申请',
+        id:'submit',
+        leaf:true
+    },{
+        text:'所有采购',
+        id:'all_purchases',
+        leaf:true
+    }]
+}]

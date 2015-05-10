@@ -1,0 +1,8 @@
+[{
+    text:'采购审核',
+    children:[{
+        text:'确定采购方式',
+        id:'decide_method',
+        leaf:true
+    }]
+}]
